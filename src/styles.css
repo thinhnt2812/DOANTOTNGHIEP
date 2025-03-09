@@ -1,1 +1,25 @@
-/* You can add global styles to this file, and also import other style files */
+/* Reset mặc định cho toàn bộ trang */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Biến màu chính cho website */
+:root {
+  --main-color: #252B36; /* Màu nền chính */
+  --hover-bgr: #42474E;  /* Màu nền khi hover */
+  --sel-bgr: #31363D;  /* Màu nền khi hover */
+  --hover-color: #D98324; /* Màu chữ khi hover */
+}
+
+/* Thiết lập kích thước cơ bản cho trang web */
+html {
+  font-size: 10px; /* 1rem = 10px */
+}
+
+/* Thiết lập font chữ cho toàn bộ website */
+body {
+  font-family: 'Poppins', sans-serif;
+}
+  

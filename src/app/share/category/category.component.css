@@ -1,0 +1,30 @@
+.category {
+    height: calc(100vh - 68px);
+    width: 12%;
+    background-color: var(--main-color);
+    top: 68px;
+    position: fixed;
+    user-select: none;
+}
+.category_item {
+    width: 100%;
+    font-size: 1.4rem;
+    height: 5rem;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0 1.5rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+.category_item:hover {
+    background-color: #42474E;
+    color: var(--hover-color);
+}
+.category_item.selected {
+    padding-left: 3rem;
+    background-color: var(--sel-bgr);
+    color: var(--hover-color);
+}
