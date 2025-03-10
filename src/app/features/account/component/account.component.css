@@ -28,7 +28,7 @@
 }
 .content_header_item{
     display: flex;
-    width: calc(100% / 10);
+    width: calc(100% / 8);
     list-style: none;
     font-size: 16px;
     font-weight: bold;
@@ -43,8 +43,8 @@
     color: var(--hover-color);
 }
 .content_header_item:last-child:hover{
-    color: #fff;
     cursor: default;
+    color: #fff;
 }
 .content_table_body{
     display: flex;
@@ -63,12 +63,13 @@
 }
 .content_body_item{
     display: flex;
-    width: calc(100% / 10);
+    width: calc(100% / 8);
     list-style: none;
     font-size: 14px;
     font-weight: 500;
     justify-content: center;
     align-items: center;
+    text-align: center;
 }
 .content_body_item:first-child{
     font-weight: bold;
@@ -190,5 +191,4 @@
 .content_body_button:hover {
     box-shadow: 0 4px 3px 1px #FCFCFC, 0 6px 8px #D6D7D9, 0 -4px 4px #CECFD1, 0 -6px 4px #FEFEFE, inset 0 0 3px 3px #CECFD1;
 }
-  
-  
+

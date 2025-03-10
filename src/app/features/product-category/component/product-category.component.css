@@ -28,7 +28,7 @@
 }
 .content_header_item{
     display: flex;
-    width: calc(100% / 10);
+    width: calc(100% / 7);
     list-style: none;
     font-size: 16px;
     font-weight: bold;
@@ -37,6 +37,9 @@
     user-select: none;
     color: #fff;
     gap: 5px;
+}
+.content_header_item:nth-child(3){
+    width: calc((100% / 7)*3);
 }
 .content_header_item:hover{
     cursor: pointer;
@@ -63,12 +66,16 @@
 }
 .content_body_item{
     display: flex;
-    width: calc(100% / 10);
+    width: calc(100% / 7);
     list-style: none;
     font-size: 14px;
     font-weight: 500;
     justify-content: center;
     align-items: center;
+    text-align: center;
+}
+.content_body_item:nth-child(3){
+    width: calc((100% / 7)*3);
 }
 .content_body_item:first-child{
     font-weight: bold;
