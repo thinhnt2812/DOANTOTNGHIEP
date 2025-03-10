@@ -1,25 +1,16 @@
-/* Reset mặc định cho toàn bộ trang */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-/* Biến màu chính cho website */
 :root {
-  --main-color: #252B36; /* Màu nền chính */
-  --hover-bgr: #42474E;  /* Màu nền khi hover */
-  --sel-bgr: #31363D;  /* Màu nền khi hover */
-  --hover-color: #D98324; /* Màu chữ khi hover */
-}
+  --main-color: #252B36; 
+  --hover-bgr: #42474E;  
+  --sel-bgr: #31363D;  
+  --hover-color: #D98324; 
+  --btn-color: #2D336B;
+  --btn-hover: #7886C7;
 
-/* Thiết lập kích thước cơ bản cho trang web */
-html {
-  font-size: 10px; /* 1rem = 10px */
+  --box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
 }
-
-/* Thiết lập font chữ cho toàn bộ website */
-body {
-  font-family: 'Poppins', sans-serif;
-}
-  

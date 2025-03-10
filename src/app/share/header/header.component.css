@@ -2,25 +2,26 @@
     height: 68px;
     width: 100%;
     background-color: var(--main-color);
-    padding: 0 4rem;
+    padding: 0 40px;
     display: flex;
     align-items: center;
     position: fixed;
     top: 0;
     justify-content: space-between;
+    z-index: 1000;
 }
 .header_logo{
-    height: 5rem;
+    height: 50px;
     width: auto;
     object-fit: contain;
 }
 .header_user_contact{
     color: white;
-    font-size: 1.5rem;
+    font-size: 15px;
     display: flex;
     align-items: center;
-    gap: 1rem;
-    padding: 1rem 1.6rem;
+    gap: 10px;
+    padding: 10px 16px;
     border-radius: 50px;
     text-decoration: none;
 }
@@ -28,11 +29,11 @@
     background-color: var(--hover-bgr);
 }
 .header_user_contact_icon{
-    font-size: 2rem;
+    font-size: 20px;
 }
 .header_user{
     display: flex;
-    gap: 3rem;
+    gap: 30px;
     align-items: center;
 }
 .header_user_line{
@@ -43,10 +44,10 @@
 }
 .header_user_name{
     color: white;
-    font-size: 1.5rem;
+    font-size: 15px;
 }
 .header_user_out{
-    margin-left: 1rem;
+    margin-left: 10px;
 }
 .header_user_out:hover{
     cursor: pointer;
