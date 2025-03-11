@@ -7,7 +7,9 @@ import { AuthGuard } from './app/login/auth.guard';
 import { provideHttpClient } from '@angular/common/http';
 import { AccountComponent } from './app/features/account/component/account.component';
 import { ProductCategoryComponent } from './app/features/product-category/component/product-category.component';
+import { ProductComponent } from './app/features/product/component/product.component';
 import { EmployeeComponent } from './app/features/employee/component/employee.component';
+import { SupplierComponent } from './app/features/supplier/component/supplier.component';
 import { ComingsoonComponent } from './app/share/comingsoon/comingsoon.component';
 import { PageNotFoundComponent } from './app/share/page-not-found/page-not-found.component';
 
@@ -19,9 +21,11 @@ bootstrapApplication(AppComponent, {
       { path: 'admin', component: AdminDashboardComponent,
           canActivate: [AuthGuard],
           children: [
-            { path: 'account', component: AccountComponent },
-            { path: 'productcategory', component: ProductCategoryComponent },
             { path: 'employee', component: EmployeeComponent },
+            { path: 'supplier', component: SupplierComponent },
+            { path: 'product', component: ProductComponent },
+            { path: 'productcategory', component: ProductCategoryComponent },
+            { path: 'account', component: AccountComponent },
             { path: 'comingsoon', component: ComingsoonComponent },
             { path: '**', component: PageNotFoundComponent },
           ]

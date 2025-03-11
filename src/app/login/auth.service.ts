@@ -15,11 +15,11 @@ export class AuthService {
     return this.http.get<any[]>(`${this.apiUrl}?loginname=${loginname}&password=${password}`)
       .pipe(
         map(users => {
-          if (users.length > 0) {
+          if (users.length > 0 && users[0].status === 'Đang hoạt động') {
             localStorage.setItem('user', JSON.stringify(users[0]));
             return users[0];
           } else {
-            throw new Error('Invalid credentials');
+            throw new Error('Invalid credentials or inactive account');
           }
         })
       );
