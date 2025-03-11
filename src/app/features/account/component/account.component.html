@@ -58,16 +58,18 @@
     <label>Mật khẩu</label>
     <input type="password" class="form-control mb-3" [(ngModel)]="currentAccount.password">
     <label>Chủ tài khoản</label>
-    <input type="text" class="form-control mb-3" [(ngModel)]="currentAccount.accountowner">
+    <select class="form-select mb-3" [(ngModel)]="currentAccount.accountowner">
+      <option *ngFor="let employee of activeEmployees" [value]="employee.name">{{ employee.name }}</option>
+    </select>
     <label>Số điện thoại</label>
     <input type="text" class="form-control mb-3" [(ngModel)]="currentAccount.phone">
     <label>Vai trò</label>
-    <select class="form-control mb-3" [(ngModel)]="currentAccount.role">
+    <select class="form-select mb-3" [(ngModel)]="currentAccount.role">
       <option value="Admin">Admin</option>
       <option value="User">User</option>
     </select>
     <label>Trạng thái</label>
-    <select class="form-control" [(ngModel)]="currentAccount.status">
+    <select class="form-select" [(ngModel)]="currentAccount.status">
       <option value="Đang hoạt động">Đang hoạt động</option>
       <option value="Đã dừng">Đã dừng</option>
     </select>

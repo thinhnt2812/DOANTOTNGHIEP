@@ -1,0 +1,6 @@
+<form (ngSubmit)="login()">
+  <input type="text" [(ngModel)]="loginname" name="loginname" placeholder="Tên đăng nhập" required>
+  <input type="password" [(ngModel)]="password" name="password" placeholder="Mật khẩu" required>
+  <button type="submit">Đăng nhập</button>
+</form>
+<p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>

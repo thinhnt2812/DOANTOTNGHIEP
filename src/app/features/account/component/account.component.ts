@@ -3,6 +3,7 @@ import { AccountService } from '../account.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { EmployeeService } from '../../employee/employee.service';
 
 @Component({
   selector: 'app-account',
@@ -23,18 +24,26 @@ export class AccountComponent implements OnInit {
   paginatedAccounts: any[] = [];
   sortKey: string = '';
   sortDirection: 'asc' | 'desc' = 'asc';
+  activeEmployees: any[] = []; // Add a variable to store active employees
 
-  constructor(private accountService: AccountService, private modalService: NgbModal) {}
+  constructor(private accountService: AccountService, private modalService: NgbModal, private employeeService: EmployeeService) {}
 
   ngOnInit(): void {
     document.title = 'Danh sách tài khoản';
     this.loadAccounts();
+    this.loadActiveEmployees(); // Load active employees on init
   }
 
   loadAccounts() {
     this.accountService.getAccounts().subscribe((data) => {
       this.accounts = data;
       this.updatePaginatedAccounts();
+    });
+  }
+
+  loadActiveEmployees() {
+    this.employeeService.getActiveEmployees().subscribe((data) => {
+      this.activeEmployees = data;
     });
   }
 

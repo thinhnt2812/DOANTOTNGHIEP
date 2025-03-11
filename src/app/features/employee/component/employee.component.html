@@ -60,20 +60,20 @@
     <label>Họ và tên</label>
     <input type="text" class="form-control mb-3" [(ngModel)]="currentEmployee.name">
     <label>Giới tính</label>
-    <select class="form-control mb-3" [(ngModel)]="currentEmployee.gender">
+    <select class="form-select mb-3" [(ngModel)]="currentEmployee.gender">
       <option value="Nam">Nam</option>
       <option value="Nữ">Nữ</option>
     </select>
     <label>Số điện thoại</label>
     <input type="text" class="form-control mb-3" [(ngModel)]="currentEmployee.phone">
     <label>Quê quán</label>
-    <select class="form-control mb-3" [(ngModel)]="currentEmployee.hometown" required>
+    <select class="form-select mb-3" [(ngModel)]="currentEmployee.hometown" required>
       <option *ngFor="let city of hometowns" [value]="city">{{ city }}</option>
     </select>
     <label>Ngày sinh</label>
     <input type="date" class="form-control mb-3" [(ngModel)]="currentEmployee.dob">
     <label>Chức vụ</label>
-    <select class="form-control mb-3" [(ngModel)]="currentEmployee.position">
+    <select class="form-select mb-3" [(ngModel)]="currentEmployee.position">
       <option value="Trưởng phòng">Trưởng phòng</option>
       <option value="Trưởng nhóm">Trưởng nhóm</option>
       <option value="Nhân viên">Nhân viên</option>
@@ -81,7 +81,7 @@
     <label>Ngày vào làm</label>
     <input type="date" class="form-control mb-3" [(ngModel)]="currentEmployee.dow">
     <label>Trạng thái</label>
-    <select class="form-control" [(ngModel)]="currentEmployee.status">
+    <select class="form-select" [(ngModel)]="currentEmployee.status">
       <option value="Đang hoạt động">Đang hoạt động</option>
       <option value="Đã nghỉ">Đã nghỉ</option>
     </select>

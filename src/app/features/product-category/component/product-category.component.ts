@@ -94,7 +94,7 @@ export class ProductCategoryComponent implements OnInit {
       id: '',
       name: '',
       description: '',
-      status: 'active'
+      status: 'Đang hoạt động'
     };
     this.modalService.open(this.categoryModal);
   }

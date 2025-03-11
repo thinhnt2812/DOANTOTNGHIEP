@@ -115,6 +115,8 @@
 .content_add_button:hover{
     opacity: .9;
 }
+
+.form-select:focus,
 .form-control:focus,
 .btn-close:focus{
     box-shadow: none;

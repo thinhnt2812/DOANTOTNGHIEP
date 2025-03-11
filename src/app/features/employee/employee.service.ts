@@ -25,4 +25,8 @@ export class EmployeeService {
   deleteEmployee(id: number): Observable<any> {
     return this.http.delete<any>(`${this.apiUrl}/${id}`);
   }
+
+  getActiveEmployees(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}?status=Đang hoạt động`);
+  }
 }
