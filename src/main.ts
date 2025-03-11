@@ -9,6 +9,7 @@ import { AccountComponent } from './app/features/account/component/account.compo
 import { ProductCategoryComponent } from './app/features/product-category/component/product-category.component';
 import { EmployeeComponent } from './app/features/employee/component/employee.component';
 import { ComingsoonComponent } from './app/share/comingsoon/comingsoon.component';
+import { PageNotFoundComponent } from './app/share/page-not-found/page-not-found.component';
 
 bootstrapApplication(AppComponent, {
   providers: [
@@ -21,7 +22,8 @@ bootstrapApplication(AppComponent, {
             { path: 'account', component: AccountComponent },
             { path: 'productcategory', component: ProductCategoryComponent },
             { path: 'employee', component: EmployeeComponent },
-            { path: '**', component: ComingsoonComponent },
+            { path: 'comingsoon', component: ComingsoonComponent },
+            { path: '**', component: PageNotFoundComponent },
           ]
       },
       { path: '**', redirectTo: 'login' }

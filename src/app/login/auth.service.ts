@@ -32,4 +32,10 @@ export class AuthService {
   isLoggedIn(): boolean {
     return localStorage.getItem('user') !== null;                                                 
   }
+
+  getUserName(): string {
+    const userString = localStorage.getItem('user');
+    const user = userString ? JSON.parse(userString) : null;
+    return user ? user.accountowner : '';
+  }
 }

@@ -18,9 +18,13 @@ export class LoginComponent {
   constructor(private authService: AuthService, private router: Router) {}
 
   login() {
+    if (!this.loginname || !this.password) {
+      this.errorMessage = 'Bạn chưa nhập tài khoản, mật khẩu';
+      return;
+    }
     this.authService.login(this.loginname, this.password).subscribe({
       next: () => this.router.navigate(['/admin']),
-      error: () => this.errorMessage = 'Tên đăng nhập hoặc mật khẩu sai'
+      error: () => this.errorMessage = 'Tên đăng nhập hoặc mật khẩu không chính xác'
     });
   }
 }

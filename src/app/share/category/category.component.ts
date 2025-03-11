@@ -11,10 +11,6 @@ export class CategoryComponent implements OnInit {
   selectedCategory: string = '';
 
   ngOnInit() {
-    const storedCategory = localStorage.getItem('selectedCategory');
-    if (storedCategory) {
-      this.selectedCategory = storedCategory;
-    }
   }
 
   selectCategory(category: string) {

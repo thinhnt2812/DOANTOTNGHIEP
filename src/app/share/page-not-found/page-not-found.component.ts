@@ -1,24 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { AuthService } from '../../login/auth.service';
 import { Router } from '@angular/router';
 
+
 @Component({
-  selector: 'app-header',
+  selector: 'app-page-not-found',
   imports: [],
-  templateUrl: './header.component.html',
-  styleUrl: './header.component.css'
+  templateUrl: './page-not-found.component.html',
+  styleUrl: './page-not-found.component.css'
 })
-export class HeaderComponent implements OnInit {
+export class PageNotFoundComponent {
   userName: string | undefined;
 
   constructor(private authService: AuthService, private router: Router) {}
-
+  
   ngOnInit() {
     this.userName = this.authService.getUserName();
-  }
-
-  logout() {
-    this.authService.logout();
-    this.router.navigate(['/login']);
   }
 }
