@@ -27,6 +27,9 @@ export class ProductComponent implements OnInit {
   sortDirection: 'asc' | 'desc' = 'asc';
   activeCategories: any[] = [];
   activeSuppliers: any[] = [];
+  filterType: string = '';
+  filterSupplier: string = '';
+  filterStatus: string = '';
 
   constructor(private productService: ProductService, private modalService: NgbModal, private productCategoryService: ProductCategoryService, private supplierService: SupplierService) {}
 
@@ -114,9 +117,9 @@ export class ProductComponent implements OnInit {
       type: '',
       size: '',
       supplier: '',
-      quantity: '',
-      price: '',
-      importprice: '',
+      quantity: 0,
+      price: 0,
+      importprice: 0,
       status: 'Đang bán'
     };
     this.modalService.open(this.productModal);
@@ -129,6 +132,10 @@ export class ProductComponent implements OnInit {
     }
     if (isNaN(this.currentProduct.quantity) || isNaN(this.currentProduct.price) || isNaN(this.currentProduct.importprice)) {
       this.errorMessage = 'Số lượng, giá bán và giá nhập phải là số.';
+      return;
+    }
+    if (this.currentProduct.quantity < 0 || this.currentProduct.price < 0 || this.currentProduct.importprice < 0) {
+      this.errorMessage = 'Số lượng, giá bán và giá nhập không được là số âm.';
       return;
     }
     this.errorMessage = null;
@@ -173,26 +180,6 @@ export class ProductComponent implements OnInit {
     return this.currentProduct.name && this.currentProduct.type && this.currentProduct.size && this.currentProduct.supplier && this.currentProduct.quantity && this.currentProduct.price && this.currentProduct.importprice && this.currentProduct.status;
   }
 
-  searchProducts() {
-    if (this.searchTerm.trim() === '') {
-      this.loadProducts();
-    } else {
-      this.products = this.products.filter(product =>
-        product.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        product.type.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        product.size.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        product.supplier.toLowerCase().includes(this.searchTerm.toLowerCase())
-      );
-      this.updatePaginatedProducts();
-    }
-  }
-
-  onSearchTermChange() {
-    if (this.searchTerm.trim() === '') {
-      this.loadProducts();
-    }
-  }
-
   sortProducts(key: string) {
     if (this.sortKey === key) {
       this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
@@ -212,5 +199,23 @@ export class ProductComponent implements OnInit {
       }
     });
     this.updatePaginatedProducts();
+  }
+
+  applySearchAndFilters() {
+    this.productService.getProducts().subscribe((data) => {
+      this.products = data.filter(product => {
+        const matchesSearchTerm = this.searchTerm.trim() === '' || 
+          product.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+          product.type.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+          product.supplier.toLowerCase().includes(this.searchTerm.toLowerCase());
+
+        const matchesFilterType = !this.filterType || product.type === this.filterType;
+        const matchesFilterSupplier = !this.filterSupplier || product.supplier === this.filterSupplier;
+        const matchesFilterStatus = !this.filterStatus || product.status === this.filterStatus;
+
+        return matchesSearchTerm && matchesFilterType && matchesFilterSupplier && matchesFilterStatus;
+      });
+      this.updatePaginatedProducts();
+    });
   }
 }

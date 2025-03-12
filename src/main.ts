@@ -12,6 +12,7 @@ import { EmployeeComponent } from './app/features/employee/component/employee.co
 import { SupplierComponent } from './app/features/supplier/component/supplier.component';
 import { ComingsoonComponent } from './app/share/comingsoon/comingsoon.component';
 import { PageNotFoundComponent } from './app/share/page-not-found/page-not-found.component';
+import { ImportGoodsComponent } from './app/features/import-goods/component/import-goods.component';
 
 bootstrapApplication(AppComponent, {
   providers: [
@@ -25,6 +26,7 @@ bootstrapApplication(AppComponent, {
             { path: 'supplier', component: SupplierComponent },
             { path: 'product', component: ProductComponent },
             { path: 'productcategory', component: ProductCategoryComponent },
+            { path: 'importgoods', component: ImportGoodsComponent },
             { path: 'account', component: AccountComponent },
             { path: 'comingsoon', component: ComingsoonComponent },
             { path: '**', component: PageNotFoundComponent },

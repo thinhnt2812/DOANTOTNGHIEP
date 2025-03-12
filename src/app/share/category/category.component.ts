@@ -11,6 +11,7 @@ export class CategoryComponent implements OnInit {
   selectedCategory: string = '';
 
   ngOnInit() {
+    this.selectedCategory = localStorage.getItem('selectedCategory') || '';
   }
 
   selectCategory(category: string) {

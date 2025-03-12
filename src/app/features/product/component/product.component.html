@@ -2,8 +2,33 @@
   <p class="content_title">Danh sách sản phẩm</p>
   <div class="content_action">
     <button class="content_add_button" (click)="openModal()">Thêm sản phẩm</button>
-    <input type="text" class="form-control ms-auto" [(ngModel)]="searchTerm" (input)="onSearchTermChange()" placeholder="Tìm kiếm sản phẩm...">
-    <button class="btn btn-primary" (click)="searchProducts()">Tìm kiếm</button>
+    <div class="content_action_list">
+      <div class="content_action_item">
+        <p>Lọc theo danh mục:</p>
+        <select class="form-select" [(ngModel)]="filterType">
+          <option value="">Tất cả danh mục</option>
+          <option *ngFor="let category of activeCategories" [value]="category.name">{{ category.name }}</option>
+        </select>
+      </div>
+      <div class="content_action_item">
+        <p>Lọc theo nhà cung cấp:</p>
+        <select class="form-select" [(ngModel)]="filterSupplier">
+          <option value="">Tất cả nhà cung cấp</option>
+          <option *ngFor="let supplier of activeSuppliers" [value]="supplier.name">{{ supplier.name }}</option>
+        </select>
+      </div>
+      <div class="content_action_item">
+        <p>Lọc theo trạng thái:</p>
+        <select class="form-select" [(ngModel)]="filterStatus">
+          <option value="">Tất cả trạng thái</option>
+          <option value="Đang bán">Đang bán</option>
+          <option value="Đã dừng">Đã dừng</option>
+          <option value="Hàng nhập">Hàng nhập</option>
+        </select>
+      </div>
+      <input type="text" class="form-control" [(ngModel)]="searchTerm" placeholder="Tìm kiếm sản phẩm...">
+      <button class="content_add_button" (click)="applySearchAndFilters()">Xác nhận</button>
+    </div>
   </div>
   <div class="content_table">
     <ul class="content_table_header">
@@ -25,13 +50,15 @@
       <li class="content_body_item">{{ product.size }}</li>
       <li class="content_body_item">{{ product.supplier }}</li>
       <li class="content_body_item">{{ product.quantity }}</li>
-      <li class="content_body_item">{{ product.price | number:'1.0-0' }}đ</li>
-      <li class="content_body_item">{{ product.importprice | number:'1.0-0' }}đ</li>
+      <li class="content_body_item">{{ product.price ? (product.price | number:'1.0-0') + 'đ' : '' }}</li>
+      <li class="content_body_item">{{ product.importprice ? (product.importprice | number:'1.0-0') + 'đ' : '' }}</li>
       <li class="content_body_item" [ngClass]="{'text-success': product.status === 'Đang bán', 'text-danger': product.status === 'Đã dừng'}">
         {{ product.status }}
       </li>
       <li class="content_body_item">
-        <button class="content_body_button" (click)="openModal(product)">Sửa</button>
+        <button [ngClass]="{'content_body_button': product.status !== 'Hàng nhập', 'content_body_button_up': product.status === 'Hàng nhập'}" (click)="openModal(product)">
+          {{ product.status === 'Hàng nhập' ? 'Bổ sung' : 'Sửa' }}
+        </button>
         <button class="content_body_button" (click)="openDeleteModal(product.id)">Xóa</button>
       </li>
     </ul>    
@@ -72,9 +99,9 @@
     <label>Số lượng</label>
     <input type="number" class="form-control mb-3" [(ngModel)]="currentProduct.quantity">
     <label>Giá bán (VND)</label>
-    <input type="text" class="form-control mb-3" [(ngModel)]="currentProduct.price">
+    <input type="number" class="form-control mb-3 appearance: none;" [(ngModel)]="currentProduct.price">
     <label>Giá nhập (VND)</label>
-    <input type="text" class="form-control mb-3" [(ngModel)]="currentProduct.importprice">
+    <input type="number" class="form-control mb-3 appearance: none;" [(ngModel)]="currentProduct.importprice">
     <label>Trạng thái</label>
     <select class="form-select" [(ngModel)]="currentProduct.status">
       <option value="Đang bán">Đang bán</option>

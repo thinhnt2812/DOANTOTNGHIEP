@@ -15,7 +15,8 @@
         </div>
         <div class="login_input_ctm">
           <i class="fa-solid fa-lock"></i>
-          <input class="login_input" type="password" [(ngModel)]="password" name="password" placeholder="Mật khẩu" required autocomplete="off">
+          <input class="login_input" [type]="showPassword ? 'text' : 'password'" [(ngModel)]="password" name="password" placeholder="Mật khẩu" required autocomplete="off">
+          <i class="fa-solid login_show" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'" (click)="togglePasswordVisibility()"></i>
         </div>
         <button class="login_button" type="submit">Đăng nhập</button>
       </form>

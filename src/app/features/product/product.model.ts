@@ -4,8 +4,8 @@ export interface Product {
     type: string;
     size: string;
     supplier: string;
-    quantity: string;
-    price: string;
-    importprice: string;
+    quantity: number;
+    price: number;
+    importprice: number;
     status: string;
 }
