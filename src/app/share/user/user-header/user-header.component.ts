@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../../login/auth.service';
+import { AuthService } from '../../../login/auth.service';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-header',
+  selector: 'app-user-header',
   imports: [],
-  templateUrl: './header.component.html',
-  styleUrl: './header.component.css'
+  templateUrl: './user-header.component.html',
+  styleUrl: './user-header.component.css'
 })
-export class HeaderComponent implements OnInit {
+export class UserHeaderComponent implements OnInit {
   userName: string | undefined;
   userRole: string | undefined; 
 

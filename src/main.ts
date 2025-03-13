@@ -2,7 +2,7 @@ import { bootstrapApplication } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
 import { AppComponent } from './app/app.component';
 import { LoginComponent } from './app/login/component/login.component';
-import { AdminDashboardComponent } from './app/admin-dashboard/admin-dashboard.component';
+import { AdminDashboardComponent } from './app/dashboard/admin-dashboard/admin-dashboard.component';
 import { AuthGuard } from './app/login/auth.guard';
 import { provideHttpClient } from '@angular/common/http';
 import { AccountComponent } from './app/features/account/component/account.component';
@@ -13,6 +13,9 @@ import { SupplierComponent } from './app/features/supplier/component/supplier.co
 import { ComingsoonComponent } from './app/share/comingsoon/comingsoon.component';
 import { PageNotFoundComponent } from './app/share/page-not-found/page-not-found.component';
 import { ImportGoodsComponent } from './app/features/import-goods/component/import-goods.component';
+import { UserDashboardComponent } from './app/dashboard/user-dashboard/user-dashboard.component';
+import { UserNotFoundComponent } from './app/share/user/user-not-found/user-not-found.component';
+import { OrderComponent } from './app/features/order/component/order.component';
 
 bootstrapApplication(AppComponent, {
   providers: [
@@ -31,6 +34,13 @@ bootstrapApplication(AppComponent, {
             { path: 'comingsoon', component: ComingsoonComponent },
             { path: '**', component: PageNotFoundComponent },
           ]
+      },
+      { path: 'user', component: UserDashboardComponent,
+        canActivate: [AuthGuard],
+        children: [
+          { path: 'order', component: OrderComponent },
+          { path: '**', component: UserNotFoundComponent },
+        ]
       },
       { path: '**', redirectTo: 'login' }
     ])

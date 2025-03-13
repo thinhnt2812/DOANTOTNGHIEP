@@ -28,7 +28,13 @@ export class LoginComponent {
       return;
     }
     this.authService.login(this.loginname, this.password).subscribe({
-      next: () => this.router.navigate(['/admin']),
+      next: (user) => {
+        if (user.role === 'Admin') {
+          this.router.navigate(['/admin']);
+        } else if (user.role === 'User') {
+          this.router.navigate(['/user']);
+        }
+      },
       error: () => this.errorMessage = 'Tên đăng nhập hoặc mật khẩu không chính xác'
     });
   }
