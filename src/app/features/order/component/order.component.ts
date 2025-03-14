@@ -21,7 +21,7 @@ export class OrderComponent implements OnInit {
     purchasedate: '',
     purchasedproduct: '',
     productcategory: '',
-    quantity: 0,
+    quantity: 1,
     unitprice: 0,
     intomoney: 0
   };
@@ -32,13 +32,34 @@ export class OrderComponent implements OnInit {
   categories: any[] = [];
   productSearch: string = '';
   validationMessage: string = '';
+  selectedProduct: any = null;
 
   constructor(private orderService: OrderService, private productService: ProductService, private productCategoryService: ProductCategoryService, private modalService: NgbModal) {}
 
   ngOnInit() {
+    document.title = 'Bán hàng';
     this.loadOrders();
     this.loadProducts();
     this.loadCategories();
+  }
+
+  increaseQuantity() {
+    this.order.quantity++;
+    this.calculateTotalPrice();
+  }
+
+  decreaseQuantity() {
+    if (this.order.quantity > 1) {
+      this.order.quantity--;
+      this.calculateTotalPrice();
+    }
+  }
+
+  onQuantityChange() {
+    if (this.order.quantity < 1) {
+      this.order.quantity = 1;
+    }
+    this.calculateTotalPrice();
   }
 
   loadOrders() {
@@ -65,7 +86,11 @@ export class OrderComponent implements OnInit {
   onCategoryChange() {
     const selectedCategory = this.order.productcategory;
     this.productService.getProducts().subscribe(data => {
-      this.products = data.filter(product => product.status === 'Đang bán' && product.type === selectedCategory);
+      if (selectedCategory === '') {
+        this.products = data.filter(product => product.status === 'Đang bán');
+      } else {
+        this.products = data.filter(product => product.status === 'Đang bán' && product.type === selectedCategory);
+      }
       this.filteredProducts = this.products;
       this.onProductSearch();
     });
@@ -86,10 +111,7 @@ export class OrderComponent implements OnInit {
   onProductSelect(product: any) {
     this.order.purchasedproduct = product.name;
     this.order.unitprice = product.price;
-    this.calculateTotalPrice();
-  }
-
-  onQuantityChange() {
+    this.selectedProduct = product;
     this.calculateTotalPrice();
   }
 
@@ -141,3 +163,30 @@ export class OrderComponent implements OnInit {
     });
   }
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  const closeIcon = document.querySelector(".icon_close_mbl");
+  const closeIconI = closeIcon?.querySelector("i");
+  const elementsToHide = document.querySelectorAll(".left_top_top, .left_buttom");
+
+  if (closeIcon) {
+    closeIcon.addEventListener("click", () => {
+      let isHidden = false;
+      elementsToHide.forEach(element => {
+        if (element instanceof HTMLElement) {
+          if (element.style.display === "none") {
+            element.style.display = element.classList.contains("left_top_top") ? "flex" : "block";
+          } else {
+            element.style.display = "none";
+            isHidden = true;
+          }
+        }
+      });
+
+      if (closeIconI) {
+        closeIconI.classList.toggle("fa-xmark", !isHidden);
+        closeIconI.classList.toggle("fa-bars", isHidden);
+      }
+    });
+  }
+});

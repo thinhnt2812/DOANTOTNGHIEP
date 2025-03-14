@@ -33,6 +33,10 @@
 .header_user_contact_icon{
     font-size: 20px;
 }
+.header_user_contact_icon{
+    display: flex;
+    align-items: center;
+}
 .header_user{
     display: flex;
     gap: 60px;
@@ -59,4 +63,42 @@
     color: var(--hover-color);
     padding-right: 10px;
     border-right: 1px solid white;
+}
+@media (max-width: 770px) {
+    .header_user_line{
+        display: none;
+    }
+    .header_user{
+        gap: 10px;
+    }
+}
+
+@media (max-width: 530px) {
+    .header_user_contact{
+        padding: 10px 8px;
+        gap: 8px;
+        font-size: 13px;
+    }
+    .header_user_contact_icon i{
+        font-size: 14px;
+    }
+    .header_user_name{
+        font-size: 13px;
+        gap: 5px;
+    }
+}
+@media (max-width: 465px) {
+    .header_logo{
+        display: none;
+    }
+    .header_user{
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+    }
+}
+@media (max-width: 380px) {
+    .header_user_contact span:nth-child(2){
+        display: none;
+    }
 }

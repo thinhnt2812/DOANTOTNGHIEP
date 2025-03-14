@@ -35,3 +35,23 @@
 .click:hover{
     background-color: var(--hover-color);
 }
+@media (max-width: 580px) {
+    .pagenotfound img{
+        width: 100%;
+    }
+    .pagenotfound_title{
+        font-size: 18px;
+    }
+    .pagenotfound_title span{
+        font-size: 26px;
+    }
+    .click{
+        padding: 5px 10px;
+    }
+}
+@media (max-width: 280px) {
+    .pagenotfound_title span{
+        display: block;
+    }
+  
+}
