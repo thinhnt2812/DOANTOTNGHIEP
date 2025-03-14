@@ -2,28 +2,36 @@
     <div class="container mt-5">
         <div class="card p-4 shadow-sm">
         <h4 class="text-center mb-3">Thêm Đơn Hàng Mới</h4>
-        <form (ngSubmit)="onSubmit()">
+        <form (ngSubmit)="onSubmit(content)">
             <div class="row">
             <div class="col-md-6">
                 <div class="mb-3">
                 <label for="customername" class="form-label">Tên Khách Hàng:</label>
-                <input type="text" id="customername" class="form-control" [(ngModel)]="order.customername" name="customername" required>
+                <input autocomplete="off" type="text" id="customername" class="form-control" [(ngModel)]="order.customername" name="customername" required>
                 </div>
     
                 <div class="mb-3">
                 <label for="customerphone" class="form-label">Số Điện Thoại Khách Hàng:</label>
-                <input type="text" id="customerphone" class="form-control" [(ngModel)]="order.customerphone" name="customerphone" required>
+                <input autocomplete="off" type="text" id="customerphone" class="form-control" [(ngModel)]="order.customerphone" name="customerphone" required>
                 </div>
     
                 <div class="mb-3">
                 <label for="purchasedate" class="form-label">Ngày Mua:</label>
                 <input type="date" id="purchasedate" class="form-control" [(ngModel)]="order.purchasedate" name="purchasedate" required>
                 </div>
+
+                <div class="mb-3">
+                <label for="productcategory" class="form-label">Danh Mục Sản Phẩm:</label>
+                <select id="productcategory" class="form-select" [(ngModel)]="order.productcategory" name="productcategory" (change)="onCategoryChange()" required>
+                    <option *ngFor="let category of categories" [value]="category.name">{{ category.name }}</option>
+                </select>
+                </div>
     
                 <div class="mb-3">
                 <label for="purchasedproduct" class="form-label">Sản Phẩm mua:</label>
+                <input type="text" class="form-control mb-2" placeholder="Tìm kiếm sản phẩm..." [(ngModel)]="productSearch" name="productSearch" (ngModelChange)="onProductSearch()" />
                 <div class="product-list">
-                    <div *ngFor="let product of products" class="product-item" (click)="onProductSelect(product)">
+                    <div *ngFor="let product of filteredProducts" class="product-item" (click)="onProductSelect(product)">
                     {{ product.name }} - {{ product.price ? (product.price | number:'1.0-0') + 'đ' : '' }}
                     </div>
                 </div>
@@ -55,3 +63,18 @@
         </div>
     </div>      
 </div>
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Validation Error</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    {{ validationMessage }}
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.close('Close click')">Close</button>
+  </div>
+</ng-template>
