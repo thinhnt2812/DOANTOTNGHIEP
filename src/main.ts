@@ -16,6 +16,7 @@ import { ImportGoodsComponent } from './app/features/import-goods/component/impo
 import { UserDashboardComponent } from './app/dashboard/user-dashboard/user-dashboard.component';
 import { UserNotFoundComponent } from './app/share/user/user-not-found/user-not-found.component';
 import { OrderComponent } from './app/features/order/component/order.component';
+import { OrderManagementComponent } from './app/features/order-management/component/order-management.component';
 
 bootstrapApplication(AppComponent, {
   providers: [
@@ -31,6 +32,7 @@ bootstrapApplication(AppComponent, {
             { path: 'productcategory', component: ProductCategoryComponent },
             { path: 'importgoods', component: ImportGoodsComponent },
             { path: 'account', component: AccountComponent },
+            { path: 'ordermanagement', component: OrderManagementComponent },
             { path: 'comingsoon', component: ComingsoonComponent },
             { path: '**', component: PageNotFoundComponent },
           ]

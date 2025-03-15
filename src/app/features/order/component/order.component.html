@@ -79,13 +79,28 @@
 
 <ng-template #content let-modal>
   <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Thông báo</h4>
+    <h4 class="modal-title" id="modal-basic-title">Tạo đơn hàng thành công</h4>
     <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
   </div>
   <div class="modal-body">
-    {{ validationMessage }}
+    <div *ngIf="createdOrder; else validationMessageTemplate">
+      <p><strong style="font-size: 24px;">Chi tiết đơn hàng</strong></p>
+      <p><strong>Mã đơn:</strong> {{ createdOrder.id }}</p>
+      <p><strong>Khách hàng:</strong> {{ createdOrder.customername }}</p>
+      <p><strong>Số điện thoại:</strong> {{ createdOrder.customerphone }}</p>
+      <p><strong>Ngày mua:</strong> {{ createdOrder.purchasedate }}</p>
+      <p><strong>Sản phẩm:</strong> {{ createdOrder.purchasedproduct }}</p>
+      <p><strong>Số lượng:</strong> {{ createdOrder.quantity }}</p>
+      <p><strong>Đơn giá:</strong> {{ createdOrder.unitprice | number:'1.0-0' }}đ</p>
+      <p><strong>Tổng tiền:</strong> {{ createdOrder.intomoney | number:'1.0-0' }}đ</p>
+      <button class="btn btn-primary" (click)="printOrder()">In hóa đơn</button>
+    </div>
+    <ng-template #validationMessageTemplate>
+      {{ validationMessage }}
+    </ng-template>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-danger" (click)="modal.close('Close click')">Đóng</button>
   </div>
 </ng-template>
+

@@ -33,6 +33,7 @@ export class OrderComponent implements OnInit {
   productSearch: string = '';
   validationMessage: string = '';
   selectedProduct: any = null;
+  createdOrder: any = null; // Store the created order for the modal
 
   constructor(private orderService: OrderService, private productService: ProductService, private productCategoryService: ProductCategoryService, private modalService: NgbModal) {}
 
@@ -146,6 +147,8 @@ export class OrderComponent implements OnInit {
 
     this.orderService.addOrder(orderToSave).subscribe(response => {
       console.log('Order added:', response);
+      this.createdOrder = response; // Store the created order
+      this.openModal(content); // Open modal with order details
       this.order = {
         id: '',
         customername: '',
@@ -161,6 +164,155 @@ export class OrderComponent implements OnInit {
       this.loadOrders();
       this.loadProducts();
     });
+  }
+
+  printOrder() {
+    if (!this.createdOrder) {
+      alert("Không có đơn hàng để in.");
+      return;
+    }
+  
+    const printContent = `
+      <html>
+        <head>
+          <title>Hóa đơn</title>
+          <style>
+            .order_print {
+              padding: 20px 0;
+              width: 70%;
+              margin: auto;
+              font-family: Arial, sans-serif;
+            }
+            .print_top {
+              display: flex;
+              margin-bottom: 10px;
+            }
+            .top_img {
+              width: 50%;
+              text-align: center;
+            }
+            .top_img img {
+              width: 50%;
+              height: 100px;
+              object-fit: contain;
+            }
+            .top_address {
+              width: 50%;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              flex-direction: column;
+            }
+            .top_address p {
+              margin-bottom: 8px;
+            }
+            .print_tt {
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              flex-direction: column;
+              padding-bottom: 10px;
+            }
+            .print_tt h3 {
+              text-transform: uppercase;
+            }
+            .print_user {
+              padding: 10px 0;
+              border-bottom: 1px dashed #333;
+              display: flex;
+              flex-wrap: wrap;
+            }
+            .print_user p {
+              width: 50%;
+              margin-bottom: 8px;
+              font-weight: bold;
+            }
+            .print_user span {
+              font-weight: 400;
+            }
+            .print_product {
+              padding: 10px 0;
+              border-bottom: 1px dashed #333;
+            }
+            .print_product_title {
+              display: flex;
+              justify-content: space-between;
+              padding: 10px 0;
+            }
+            .print_product_title p {
+              margin-bottom: 0;
+              width: 20%;
+            }
+            .print_product_title p:nth-child(1) {
+              width: 40%;
+            }
+            .print_product_title:nth-child(1) p {
+              font-weight: bold;
+            }
+            .print_buttom {
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              align-items: center;
+              padding: 10px 0;
+            }
+          </style>
+        </head>
+        <body>
+          <div class="order_print">
+            <div class="print_top">
+              <div class="top_img">
+                <img src="/assets/image/logo.png" alt="Logo">
+              </div>
+              <div class="top_address">
+                <p>Xã Nghĩa Minh</p>
+                <p>Nghĩa Đàn, Nghệ An</p>
+              </div>
+            </div>
+            <div class="print_tt">
+              <h3>Hóa đơn bán hàng</h3>
+            </div>
+            <div class="print_user">
+              <p>Ngày mua: <span>${this.createdOrder.purchasedate}</span></p>
+              <p>Số hóa đơn: <span>${this.createdOrder.id}</span></p>
+              <p>Họ tên khách hàng: <span>${this.createdOrder.customername}</span></p>
+              <p>Số điện thoại: <span>${this.createdOrder.customerphone}</span></p>
+            </div>
+            <div class="print_product">
+              <div class="print_product_title">
+                <p>Tên sản phẩm</p>
+                <p>Đơn giá</p>
+                <p>Số lượng</p>
+                <p>Thành tiền</p>
+              </div>
+              <div class="print_product_title">
+                <p>${this.createdOrder.purchasedproduct}</p>
+                <p>${this.createdOrder.unitprice.toLocaleString()}đ</p>
+                <p>${this.createdOrder.quantity}</p>
+                <p>${this.createdOrder.intomoney.toLocaleString()}đ</p>
+              </div>
+            </div>
+            <div class="print_buttom">
+              <h3>Cảm ơn quý khách và hẹn gặp lại!</h3>
+              <div class="print_button info">
+                <span style="margin-right: 20px;">SĐT: 0374341386</span>
+                <span>Website: www.thinhnt.com</span>
+              </div>
+            </div>
+          </div>
+        </body>
+      </html>
+    `;
+  
+    const printWindow = window.open('', '_blank');
+    if (printWindow) {
+      printWindow.document.write(printContent);
+      printWindow.document.close();
+      setTimeout(() => {
+        printWindow.print();
+        printWindow.onafterprint = () => printWindow.close();
+      }, 500);
+    }
   }
 }
 

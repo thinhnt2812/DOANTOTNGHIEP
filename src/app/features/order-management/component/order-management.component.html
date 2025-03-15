@@ -1,0 +1,49 @@
+<div class="content">
+  <p class="content_title">Danh sách đơn hàng</p>
+  <div class="content_action">
+    <div class="content_filter">
+      <p>Lọc theo tên sản phẩm:</p>
+      <select class="form-select" [(ngModel)]="pendingSelectedProduct" (change)="onProductFilterInput()">
+        <option value="">Tất cả sản phẩm</option>
+        <option *ngFor="let product of uniqueProducts" [value]="product">{{ product }}</option>
+      </select>
+    </div>
+    <input type="text" class="form-control" [(ngModel)]="pendingSearchTerm" (input)="onSearchTermInput()" placeholder="Tìm kiếm đơn hàng...">
+    <button class="btn btn-primary" (click)="confirmFilters()">Xác nhận</button>
+  </div>
+  <div class="content_table">
+    <ul class="content_table_header">
+      <li class="content_header_item" (click)="onSort('id')">ID <i class="fa-solid" [ngClass]="{'fa-sort': sortKey !== 'id', 'fa-arrow-down-short-wide': sortKey === 'id' && sortDirection === 'asc', 'fa-arrow-down-wide-short': sortKey === 'id' && sortDirection === 'desc'}"></i></li>
+      <li class="content_header_item" (click)="onSort('customername')">Tên khách hàng <i class="fa-solid" [ngClass]="{'fa-sort': sortKey !== 'customername', 'fa-arrow-down-short-wide': sortKey === 'customername' && sortDirection === 'asc', 'fa-arrow-down-wide-short': sortKey === 'customername' && sortDirection === 'desc'}"></i></li>
+      <li class="content_header_item" (click)="onSort('customerphone')">Số điện thoại <i class="fa-solid" [ngClass]="{'fa-sort': sortKey !== 'customerphone', 'fa-arrow-down-short-wide': sortKey === 'customerphone' && sortDirection === 'asc', 'fa-arrow-down-wide-short': sortKey === 'customerphone' && sortDirection === 'desc'}"></i></li>
+      <li class="content_header_item" (click)="onSort('purchasedate')">Ngày mua <i class="fa-solid" [ngClass]="{'fa-sort': sortKey !== 'purchasedate', 'fa-arrow-down-short-wide': sortKey === 'purchasedate' && sortDirection === 'asc', 'fa-arrow-down-wide-short': sortKey === 'purchasedate' && sortDirection === 'desc'}"></i></li>
+      <li class="content_header_item" (click)="onSort('purchasedproduct')">Sản phẩm <i class="fa-solid" [ngClass]="{'fa-sort': sortKey !== 'purchasedproduct', 'fa-arrow-down-short-wide': sortKey === 'purchasedproduct' && sortDirection === 'asc', 'fa-arrow-down-wide-short': sortKey === 'purchasedproduct' && sortDirection === 'desc'}"></i></li>
+      <li class="content_header_item" (click)="onSort('quantity')">Số lượng <i class="fa-solid" [ngClass]="{'fa-sort': sortKey !== 'quantity', 'fa-arrow-down-short-wide': sortKey === 'quantity' && sortDirection === 'asc', 'fa-arrow-down-wide-short': sortKey === 'quantity' && sortDirection === 'desc'}"></i></li>
+      <li class="content_header_item" (click)="onSort('unitprice')">Đơn giá <i class="fa-solid" [ngClass]="{'fa-sort': sortKey !== 'unitprice', 'fa-arrow-down-short-wide': sortKey === 'unitprice' && sortDirection === 'asc', 'fa-arrow-down-wide-short': sortKey === 'unitprice' && sortDirection === 'desc'}"></i></li>
+      <li class="content_header_item" (click)="onSort('intomoney')">Thành tiền <i class="fa-solid" [ngClass]="{'fa-sort': sortKey !== 'intomoney', 'fa-arrow-down-short-wide': sortKey === 'intomoney' && sortDirection === 'asc', 'fa-arrow-down-wide-short': sortKey === 'intomoney' && sortDirection === 'desc'}"></i></li>
+    </ul>
+    <ul class="content_table_body" *ngFor="let order of paginatedOrders">
+      <li class="content_body_item">{{ order.id }}</li>
+      <li class="content_body_item">{{ order.customername }}</li>
+      <li class="content_body_item">{{ order.customerphone }}</li>
+      <li class="content_body_item">{{ order.purchasedate | date:'dd/MM/yyyy' }}</li>
+      <li class="content_body_item">{{ order.purchasedproduct }}</li>
+      <li class="content_body_item">{{ order.quantity }}</li>
+      <li class="content_body_item">{{ order.unitprice | number:'1.0-0' }}đ</li>
+      <li class="content_body_item">{{ order.intomoney | number:'1.0-0' }}đ</li>
+    </ul>
+  </div>
+
+  <div class="pagination">
+    <button (click)="goToFirstPage()" [disabled]="currentPage === 1"><i class="fa-solid fa-angles-left"></i></button>
+    <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1"><i class="fa-solid fa-angle-left"></i></button>
+    
+    <span *ngFor="let page of [].constructor(totalPages); let i = index">
+        <button [ngClass]="{'active': currentPage === i + 1}" (click)="changePage(i + 1)" [disabled]="currentPage === i + 1">{{ i + 1 }}</button>
+    </span>
+    
+    <button (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages"><i class="fa-solid fa-angle-right"></i></button>
+    <button (click)="goToLastPage()" [disabled]="currentPage === totalPages"><i class="fa-solid fa-angles-right"></i></button>
+  </div>
+</div>
+
