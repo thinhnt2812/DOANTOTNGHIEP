@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 import { CategoryStatistics, EmployeeStatistics, ProductStatistics, SupplierStatistics, AccountStatistics } from './statistics-reports.model';
 import { addDays, isAfter } from 'date-fns';
 
@@ -121,5 +121,50 @@ export class StatisticsReportsService {
 
       return { totalAccounts, activeAccounts, inactiveAccounts, roles };
     });
+  }
+
+  getMonthlyRevenue(): Observable<{ month: string; revenue: number }[]> {
+    return this.http.get<any[]>(`${this.baseUrl}${this.importOrderEndpoint}`).pipe(
+      map((orders) => {
+        const revenueByMonth: { [key: string]: number } = {};
+
+        orders.forEach((order) => {
+          const orderDate = new Date(order.purchasedate);
+          const monthKey = `${orderDate.getMonth() + 1}/${orderDate.getFullYear()}`;
+          revenueByMonth[monthKey] = (revenueByMonth[monthKey] || 0) + order.intomoney;
+        });
+
+        return Object.entries(revenueByMonth)
+          .map(([month, revenue]) => ({ month, revenue }))
+          .sort((a, b) => new Date(`01/${a.month}`) > new Date(`01/${b.month}`) ? 1 : -1);
+      })
+    );
+  }
+
+  getMonthlyProfit(): Observable<{ month: string; profit: number }[]> {
+    return this.http.get<any[]>(`${this.baseUrl}${this.importOrderEndpoint}`).pipe(
+        switchMap((orders) =>
+            this.http.get<any[]>(`${this.baseUrl}${this.productsEndpoint}`).pipe(
+                map((products) => {
+                    const profitByMonth: { [key: string]: number } = {};
+
+                    orders.forEach((order) => {
+                        const product = products.find(p => p.name === order.purchasedproduct);
+                        if (product) {
+                            const profitPerUnit = product.price - product.importprice; 
+                            const totalProfit = profitPerUnit * order.quantity; 
+                            const orderDate = new Date(order.purchasedate);
+                            const monthKey = `${orderDate.getMonth() + 1}/${orderDate.getFullYear()}`;
+                            profitByMonth[monthKey] = (profitByMonth[monthKey] || 0) + totalProfit;
+                        }
+                    });
+
+                    return Object.entries(profitByMonth)
+                        .map(([month, profit]) => ({ month, profit }))
+                        .sort((a, b) => new Date(`01/${a.month}`) > new Date(`01/${b.month}`) ? 1 : -1);
+                })
+            )
+        )
+    );
   }
 }

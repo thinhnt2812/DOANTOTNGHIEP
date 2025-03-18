@@ -20,6 +20,7 @@ export class StatisticsReportsComponent implements OnInit, AfterViewInit {
   @ViewChild('supplierPieChart', { static: false }) supplierPieChart!: ElementRef;
   @ViewChild('accountPieChart', { static: false }) accountPieChart!: ElementRef;
   @ViewChild('accountRolePieChart', { static: false }) accountRolePieChart!: ElementRef;
+  @ViewChild('revenueBarChart', { static: false }) revenueBarChart!: ElementRef;
 
   totalEmployees: number = 0;
   activeEmployees: number = 0;
@@ -79,6 +80,13 @@ export class StatisticsReportsComponent implements OnInit, AfterViewInit {
   currentImportSortField: string = '';
   currentImportSortDirection: 'asc' | 'desc' = 'asc';
 
+  monthlyRevenue: { month: string; revenue: number }[] = [];
+  monthlyProfit: { month: string; profit: number }[] = [];
+
+  selectedReportType: string = 'revenue'; // Default to revenue report
+
+  currentChart: Chart | null = null; // Store the current chart instance
+
   constructor(private statisticsService: StatisticsReportsService, private modalService: NgbModal) {}
 
   ngOnInit(): void {
@@ -131,12 +139,40 @@ export class StatisticsReportsComponent implements OnInit, AfterViewInit {
       this.totalOrdertatistics = totalorder;
     });
 
+    this.statisticsService.getMonthlyRevenue().subscribe((data) => {
+      this.monthlyRevenue = data;
+      this.renderRevenueChart();
+    });
+
+    this.statisticsService.getMonthlyProfit().subscribe((data) => {
+      this.monthlyProfit = data;
+      if (this.selectedReportType === 'profit') {
+        this.renderProfitChart();
+      }
+    });
+
     // Load all orders by default
     this.loadAllOrders();
     this.loadAllImports();
   }
 
   ngAfterViewInit(): void {
+  }
+
+  ngOnChanges(): void {
+    if (this.selectedReportType === 'revenue') {
+      this.renderRevenueChart();
+    } else if (this.selectedReportType === 'profit') {
+      this.renderProfitChart();
+    }
+  }
+
+  onReportTypeChange(): void {
+    if (this.selectedReportType === 'revenue') {
+      this.renderRevenueChart();
+    } else if (this.selectedReportType === 'profit') {
+      this.renderProfitChart();
+    }
   }
 
   renderEmployeeChart(): void {
@@ -277,6 +313,84 @@ export class StatisticsReportsComponent implements OnInit, AfterViewInit {
         responsive: true,
         plugins: {
           legend: { position: 'top' },
+        },
+      },
+    });
+  }
+
+  renderRevenueChart(): void {
+    if (!this.revenueBarChart || !this.revenueBarChart.nativeElement) return;
+
+    const ctx = this.revenueBarChart.nativeElement.getContext('2d');
+    if (!ctx) return;
+
+    // Destroy the existing chart if it exists
+    if (this.currentChart) {
+      this.currentChart.destroy();
+    }
+
+    const labels = this.monthlyRevenue.map((item) => item.month);
+    const data = this.monthlyRevenue.map((item) => item.revenue);
+
+    this.currentChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [
+          {
+            label: 'Doanh thu (VND)',
+            data,
+            backgroundColor: '#2E5077',
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { position: 'top' },
+        },
+        scales: {
+          x: { title: { display: true, text: 'Tháng' } },
+          y: { title: { display: true, text: 'Doanh thu (VND)' } },
+        },
+      },
+    });
+  }
+
+  renderProfitChart(): void {
+    if (!this.revenueBarChart || !this.revenueBarChart.nativeElement) return;
+
+    const ctx = this.revenueBarChart.nativeElement.getContext('2d');
+    if (!ctx) return;
+
+    // Destroy the existing chart if it exists
+    if (this.currentChart) {
+      this.currentChart.destroy();
+    }
+
+    const labels = this.monthlyProfit.map((item) => item.month);
+    const data = this.monthlyProfit.map((item) => item.profit);
+
+    this.currentChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [
+          {
+            label: 'Lợi nhuận (VND)',
+            data,
+            backgroundColor: '#1F7D53',
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { position: 'top' },
+        },
+        scales: {
+          x: { title: { display: true, text: 'Tháng' } },
+          y: { title: { display: true, text: 'Lợi nhuận (VND)' } },
         },
       },
     });
@@ -454,6 +568,20 @@ export class StatisticsReportsComponent implements OnInit, AfterViewInit {
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Imports');
     XLSX.writeFile(workbook, 'Imports_Report.xlsx');
+  }
+
+  exportRevenueToExcel(): void {
+    const worksheet = XLSX.utils.json_to_sheet(this.monthlyRevenue);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Revenue');
+    XLSX.writeFile(workbook, 'Revenue_Report.xlsx');
+  }
+
+  exportProfitToExcel(): void {
+    const worksheet = XLSX.utils.json_to_sheet(this.monthlyProfit);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Profit');
+    XLSX.writeFile(workbook, 'Profit_Report.xlsx');
   }
 
   sortOrdersBy(field: string): void {

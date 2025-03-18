@@ -420,7 +420,24 @@
                 </div>
             </div>
         </div>
-        <div class="tab-pane fade" id="nav-dt" role="tabpanel" aria-labelledby="nav-dt-tab" tabindex="0">Doanh thu</div>
+        <div class="tab-pane fade" id="nav-dt" role="tabpanel" aria-labelledby="nav-dt-tab" tabindex="0">
+            <div class="revenue_report">
+                <div class="revenue_filter">
+                    <p class="mb-0">Bộ lọc:</p>
+                    <select class="form-select" [(ngModel)]="selectedReportType" (change)="onReportTypeChange()">
+                        <option value="revenue">Báo cáo doanh thu</option>
+                        <option value="profit">Báo cáo lợi nhuận</option>
+                    </select>
+                    <button *ngIf="selectedReportType === 'revenue'" (click)="exportRevenueToExcel()">Xuất Excel Doanh Thu</button>
+                    <button *ngIf="selectedReportType === 'profit'" (click)="exportProfitToExcel()">Xuất Excel Lợi Nhuận</button>
+                </div>
+                <div class="revenue-bar-chart">
+                    <p class="revenue_bar_chart_text" *ngIf="selectedReportType === 'revenue'">Doanh thu 12 tháng bán hàng gần nhất:</p>
+                    <p class="revenue_bar_chart_text" *ngIf="selectedReportType === 'profit'">Lợi nhuận 12 tháng gần nhất:</p>
+                    <canvas #revenueBarChart></canvas>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 

@@ -145,6 +145,7 @@
     gap: 10px;
     align-items: center;
 }
+.revenue_filter button,
 .order_report_filter button{
     background-color: var(--btn-color);
     color: white;
@@ -152,6 +153,10 @@
     border-radius: 4px;
     padding: 4px 20px;
 }
+.revenue_filter button{
+    height: 38px;
+}
+.revenue_filter button:hover,
 .order_report_filter button:hover{
     background-color: var(--btn-hover);
 }
@@ -276,4 +281,34 @@
 .order_top{
     display: flex;
     justify-content: space-between;
+}
+.revenue_report{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+.revenue-bar-chart{
+    width: 70%;
+}
+.revenue_filter{
+    width: 70%;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: end;
+}
+.form-select{
+    width: auto;
+    box-shadow: none;
+    margin: 10px;
+}
+.revenue_filter p{
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
+}
+.revenue_bar_chart_text{
+    font-weight: 600;
 }
