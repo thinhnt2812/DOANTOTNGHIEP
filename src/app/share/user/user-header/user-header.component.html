@@ -1,0 +1,23 @@
+<div class="header">
+    <div class="container">
+        <img class="header_logo" src="/assets/image/logo.png" alt="">
+        <div class="header_user">
+            <a href="https://t.me/ThinhNT" target="_blank" class="header_user_contact">
+                <span class="header_user_contact_icon">
+                    <i class="fa-brands fa-telegram"></i>
+                </span>
+                <span>
+                    Liên hệ với nhà phát triển
+                </span>
+            </a>
+            <span class="header_user_line"></span>
+            <div class="header_user_name">
+                <span>{{ userRole === 'Admin' ? 'Admin' : 'User' }}</span>
+                {{ userName }}
+                <span (click)="logout()" class="header_user_out">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>

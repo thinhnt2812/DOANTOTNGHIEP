@@ -1,0 +1,109 @@
+<div class="content">
+  <p class="content_title">Danh sách nhân viên</p>
+  <div class="content_action">
+    <button class="content_add_button" (click)="openModal()">Thêm nhân viên</button>
+    <input type="text" class="form-control ms-auto" [(ngModel)]="searchTerm" (input)="onSearchTermChange()" placeholder="Tìm kiếm nhân viên...">
+    <button class="btn btn-primary" (click)="searchEmployees()">Tìm kiếm</button>
+  </div>
+  <div class="content_table">
+    <ul class="content_table_header">
+      <li class="content_header_item" (click)="sortEmployees('id')">ID <i class="fa-solid" [ngClass]="{'fa-sort': sortKey !== 'id', 'fa-arrow-down-short-wide': sortKey === 'id' && sortDirection === 'asc', 'fa-arrow-down-wide-short': sortKey === 'id' && sortDirection === 'desc'}"></i></li>
+      <li class="content_header_item" (click)="sortEmployees('name')">Họ và tên <i class="fa-solid" [ngClass]="{'fa-sort': sortKey !== 'name', 'fa-arrow-down-short-wide': sortKey === 'name' && sortDirection === 'asc', 'fa-arrow-down-wide-short': sortKey === 'name' && sortDirection === 'desc'}"></i></li>
+      <li class="content_header_item" (click)="sortEmployees('gender')">Giới tính <i class="fa-solid" [ngClass]="{'fa-sort': sortKey !== 'gender', 'fa-arrow-down-short-wide': sortKey === 'gender' && sortDirection === 'asc', 'fa-arrow-down-wide-short': sortKey === 'gender' && sortDirection === 'desc'}"></i></li>
+      <li class="content_header_item" (click)="sortEmployees('phone')">Số điện thoại <i class="fa-solid" [ngClass]="{'fa-sort': sortKey !== 'phone', 'fa-arrow-down-short-wide': sortKey === 'phone' && sortDirection === 'asc', 'fa-arrow-down-wide-short': sortKey === 'phone' && sortDirection === 'desc'}"></i></li>
+      <li class="content_header_item" (click)="sortEmployees('hometown')">Quê quán <i class="fa-solid" [ngClass]="{'fa-sort': sortKey !== 'hometown', 'fa-arrow-down-short-wide': sortKey === 'hometown' && sortDirection === 'asc', 'fa-arrow-down-wide-short': sortKey === 'hometown' && sortDirection === 'desc'}"></i></li>
+      <li class="content_header_item" (click)="sortEmployees('dob')">Ngày sinh <i class="fa-solid" [ngClass]="{'fa-sort': sortKey !== 'dob', 'fa-arrow-down-short-wide': sortKey === 'dob' && sortDirection === 'asc', 'fa-arrow-down-wide-short': sortKey === 'dob' && sortDirection === 'desc'}"></i></li>
+      <li class="content_header_item" (click)="sortEmployees('position')">Chức vụ <i class="fa-solid" [ngClass]="{'fa-sort': sortKey !== 'position', 'fa-arrow-down-short-wide': sortKey === 'position' && sortDirection === 'asc', 'fa-arrow-down-wide-short': sortKey === 'position' && sortDirection === 'desc'}"></i></li>
+      <li class="content_header_item" (click)="sortEmployees('dow')">Ngày vào làm <i class="fa-solid" [ngClass]="{'fa-sort': sortKey !== 'dow', 'fa-arrow-down-short-wide': sortKey === 'dow' && sortDirection === 'asc', 'fa-arrow-down-wide-short': sortKey === 'dow' && sortDirection === 'desc'}"></i></li>
+      <li class="content_header_item" (click)="sortEmployees('status')">Trạng thái <i class="fa-solid" [ngClass]="{'fa-sort': sortKey !== 'status', 'fa-arrow-down-short-wide': sortKey === 'status' && sortDirection === 'asc', 'fa-arrow-down-wide-short': sortKey === 'status' && sortDirection === 'desc'}"></i></li>
+      <li class="content_header_item">Hàng động</li>
+    </ul>
+    <ul class="content_table_body" *ngFor="let employee of paginatedEmployees">
+      <li class="content_body_item">{{ employee.id }}</li>
+      <li class="content_body_item">{{ employee.name }}</li>
+      <li class="content_body_item">{{ employee.gender }}</li>
+      <li class="content_body_item">{{ employee.phone }}</li>
+      <li class="content_body_item">{{ employee.hometown }}</li>
+      <li class="content_body_item">{{ employee.dob | date:'dd/MM/yyyy' }}</li>
+      <li class="content_body_item">{{ employee.position }}</li>
+      <li class="content_body_item">{{ employee.dow | date:'dd/MM/yyyy' }}</li>      
+      <li class="content_body_item" [ngClass]="{'text-success': employee.status === 'Đang hoạt động', 'text-danger': employee.status === 'Đã nghỉ'}">
+        {{ employee.status }}
+      </li>
+      <li class="content_body_item">
+        <button class="content_body_button" (click)="openModal(employee)">Sửa</button>
+        <button class="content_body_button" (click)="openDeleteModal(employee.id)">Xóa</button>
+      </li>
+    </ul>    
+  </div>
+
+  <div class="pagination">
+    <button (click)="goToFirstPage()" [disabled]="currentPage === 1"><i class="fa-solid fa-angles-left"></i></button>
+    <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1"><i class="fa-solid fa-angle-left"></i></button>
+    
+    <span *ngFor="let page of pages">
+      <button *ngIf="page !== -1" [ngClass]="{'active': currentPage === page}" (click)="changePage(page)" [disabled]="currentPage === page">{{ page }}</button>
+      <span *ngIf="page === -1">...</span>
+    </span>
+    
+    <button (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages"><i class="fa-solid fa-angle-right"></i></button>
+    <button (click)="goToLastPage()" [disabled]="currentPage === totalPages"><i class="fa-solid fa-angles-right"></i></button>
+  </div>
+</div>
+
+<ng-template #employeeModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">{{ currentEmployee.id ? 'Sửa nhân viên' : 'Thêm nhân viên' }}</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <label>Họ và tên</label>
+    <input type="text" class="form-control mb-3" [(ngModel)]="currentEmployee.name">
+    <label>Giới tính</label>
+    <select class="form-select mb-3" [(ngModel)]="currentEmployee.gender">
+      <option value="Nam">Nam</option>
+      <option value="Nữ">Nữ</option>
+    </select>
+    <label>Số điện thoại</label>
+    <input type="text" class="form-control mb-3" [(ngModel)]="currentEmployee.phone">
+    <label>Quê quán</label>
+    <select class="form-select mb-3" [(ngModel)]="currentEmployee.hometown" required>
+      <option *ngFor="let city of hometowns" [value]="city">{{ city }}</option>
+    </select>
+    <label>Ngày sinh</label>
+    <input type="date" class="form-control mb-3" [(ngModel)]="currentEmployee.dob">
+    <label>Chức vụ</label>
+    <select class="form-select mb-3" [(ngModel)]="currentEmployee.position">
+      <option value="Trưởng phòng">Trưởng phòng</option>
+      <option value="Trưởng nhóm">Trưởng nhóm</option>
+      <option value="Nhân viên">Nhân viên</option>
+    </select>
+    <label>Ngày vào làm</label>
+    <input type="date" class="form-control mb-3" [(ngModel)]="currentEmployee.dow">
+    <label>Trạng thái</label>
+    <select class="form-select" [(ngModel)]="currentEmployee.status">
+      <option value="Đang hoạt động">Đang hoạt động</option>
+      <option value="Đã nghỉ">Đã nghỉ</option>
+    </select>
+  </div>
+  <div *ngIf="errorMessage" class="alert alert-danger mx-3">{{ errorMessage }}</div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cancel click')">Hủy</button>
+    <button type="button" class="btn btn-primary" (click)="saveEmployee()">Lưu</button>
+  </div>
+</ng-template>
+
+<ng-template #deleteModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Xác nhận xóa</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <p class="mb-0">Bạn có chắc chắn muốn xóa nhân viên này không?</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cancel click')">Hủy</button>
+    <button type="button" class="btn btn-danger" (click)="confirmDelete(); modal.close()">Xóa</button>
+  </div>
+</ng-template>
+

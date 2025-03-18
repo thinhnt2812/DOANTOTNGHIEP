@@ -1,0 +1,195 @@
+.content{
+    height: calc(100vh - 68px);
+    margin-top: 68px;  
+    margin-left: 12%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;    
+}
+.content_title{
+    font-size: 30px;
+    font-weight: bold;
+    margin: 20px;
+}
+.content_table{
+    width: 90%;
+    box-shadow: var(--box-shadow);
+    padding: 20px;
+    border-radius: 15px;
+}
+.content_table_header{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--btn-color);
+    padding: 10px 4px; 
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+.content_header_item{
+    display: flex;
+    width: calc(100% / 8);
+    list-style: none;
+    font-size: 16px;
+    font-weight: bold;
+    justify-content: center;
+    align-items: center;
+    user-select: none;
+    color: #fff;
+    gap: 5px;
+}
+.content_header_item:hover{
+    cursor: pointer;
+    color: var(--hover-color);
+}
+.content_header_item:last-child:hover{
+    cursor: default;
+    color: #fff;
+}
+.content_table_body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 6px 4px; 
+    border-radius: 8px;
+    background-color: rgba(120, 134, 199, 0.05);
+    margin-bottom: 10px;
+}
+.content_table_body:hover{
+    background-color: rgba(120, 134, 199, 0.15);
+}
+.content_table_body:last-child{
+    margin-bottom: 0;
+}
+.content_body_item{
+    display: flex;
+    width: calc(100% / 8);
+    list-style: none;
+    font-size: 14px;
+    font-weight: 500;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+.content_body_item:first-child{
+    font-weight: bold;
+    color: var(--btn-color);
+}
+.content_body_item:last-child{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+.content_body_button{
+    border: none;
+    outline: none;
+    padding: 5px 10px;
+    background-color: var(--btn-color);
+    border-radius: 6px;
+    font-weight: 600;
+    color: #fff;
+    opacity: .9;
+}
+.content_body_button:hover{
+    opacity: 1;
+}
+.content_action{
+    margin-bottom: 20px;
+    width: 85%;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+.content_add_button{
+    border: none;
+    outline: none;
+    background-color: var(--btn-color);
+    border-radius: 6px;
+    font-weight: 600;
+    color: #fff;
+    padding: 8px 14px;
+}
+.content_action input{
+    width: 240px;
+}
+.content_add_button:hover{
+    opacity: .9;
+}
+.form-select:focus,
+.form-control:focus,
+.btn-close:focus{
+    box-shadow: none;
+}
+.modal-footer{
+    padding: 6px 12px;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 20px;
+}
+
+.pagination button {
+    padding: 8px 12px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    background-color: #f8f9fa;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: all 0.3s ease-in-out;
+}
+
+.pagination button:hover {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+.pagination button[disabled] {
+    background-color: #e9ecef;
+    color: #6c757d;
+    border-color: #ddd;
+    cursor: not-allowed;
+}
+
+.pagination span {
+    font-size: 14px;
+    padding: 5px;
+    color: #333;
+}
+
+.pagination button.active {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+    font-weight: bold;
+}
+  
+.content_body_button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    outline: none;
+    cursor: pointer;
+    width: 60px;
+    height: 30px;
+    background-image: linear-gradient(to top, #D8D9DB 0%, #fff 80%, #FDFDFD 100%);
+    border-radius: 30px;
+    border: 1px solid #8F9092;
+    transition: all 0.2s ease;
+    font-family: "Source Sans Pro", sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #606060;
+    text-shadow: 0 1px #fff;
+    background-color: var(--btn-color);
+}
+
+.content_body_button:hover {
+    box-shadow: 0 4px 3px 1px #FCFCFC, 0 6px 8px #D6D7D9, 0 -4px 4px #CECFD1, 0 -6px 4px #FEFEFE, inset 0 0 3px 3px #CECFD1;
+}
+

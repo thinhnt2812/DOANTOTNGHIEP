@@ -1,0 +1,27 @@
+<div class="login">
+  <div class="login_content">
+    <div class="login_img">
+      <img src="/assets/image/home.png" alt="">
+      <div class="login_img_text">
+        <img src="/assets/image/logo_login.png" alt="">
+      </div>
+    </div>
+    <div class="login_right">
+      <h2 class="login_title">Đăng nhập</h2>
+      <form class="login_form" (ngSubmit)="login()">
+        <div class="login_input_ctm">
+          <i class="fa-solid fa-user"></i>
+          <input class="login_input" type="text" [(ngModel)]="loginname" name="loginname" placeholder="Tên đăng nhập" required autocomplete="off">
+        </div>
+        <div class="login_input_ctm">
+          <i class="fa-solid fa-lock"></i>
+          <input class="login_input" [type]="showPassword ? 'text' : 'password'" [(ngModel)]="password" name="password" placeholder="Mật khẩu" required autocomplete="off">
+          <i class="fa-solid login_show" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'" (click)="togglePasswordVisibility()"></i>
+        </div>
+        <button class="login_button" type="submit">Đăng nhập</button>
+      </form>
+      <p ngClass="login_error" *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
+      <a class="form_link" href="https://t.me/ThinhNT" target="_blank">Liên hệ với Admin <i class="fa-brands fa-telegram"></i></a>
+    </div>
+  </div>
+</div>

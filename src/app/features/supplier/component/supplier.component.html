@@ -1,0 +1,80 @@
+<div class="content">
+  <p class="content_title">Danh sách nhà cung cấp</p>
+  <div class="content_action">
+    <button class="content_add_button" (click)="openModal()">Thêm nhà cung cấp</button>
+    <input type="text" class="form-control ms-auto" [(ngModel)]="searchTerm" (input)="onSearchTermChange()" placeholder="Tìm kiếm nhà cung cấp...">
+    <button class="btn btn-primary" (click)="searchSuppliers()">Tìm kiếm</button>
+  </div>
+  <div class="content_table">
+    <ul class="content_table_header">
+      <li class="content_header_item" (click)="sortSuppliers('id')">ID <i class="fa-solid" [ngClass]="{'fa-sort': sortKey !== 'id', 'fa-arrow-down-short-wide': sortKey === 'id' && sortDirection === 'asc', 'fa-arrow-down-wide-short': sortKey === 'id' && sortDirection === 'desc'}"></i></li>
+      <li class="content_header_item" (click)="sortSuppliers('name')">Tên <i class="fa-solid" [ngClass]="{'fa-sort': sortKey !== 'name', 'fa-arrow-down-short-wide': sortKey === 'name' && sortDirection === 'asc', 'fa-arrow-down-wide-short': sortKey === 'name' && sortDirection === 'desc'}"></i></li>
+      <li class="content_header_item" (click)="sortSuppliers('address')">Địa chỉ <i class="fa-solid" [ngClass]="{'fa-sort': sortKey !== 'address', 'fa-arrow-down-short-wide': sortKey === 'address' && sortDirection === 'asc', 'fa-arrow-down-wide-short': sortKey === 'address' && sortDirection === 'desc'}"></i></li>
+      <li class="content_header_item" (click)="sortSuppliers('status')">Trạng thái <i class="fa-solid" [ngClass]="{'fa-sort': sortKey !== 'status', 'fa-arrow-down-short-wide': sortKey === 'status' && sortDirection === 'asc', 'fa-arrow-down-wide-short': sortKey === 'status' && sortDirection === 'desc'}"></i></li>
+      <li class="content_header_item">Hành động</li>
+    </ul>
+    <ul class="content_table_body" *ngFor="let supplier of paginatedSuppliers">
+      <li class="content_body_item">{{ supplier.id }}</li>
+      <li class="content_body_item">{{ supplier.name }}</li>
+      <li class="content_body_item">{{ supplier.address }}</li>
+      <li class="content_body_item" [ngClass]="{'text-success': supplier.status === 'Đang hợp tác', 'text-danger': supplier.status === 'Tạm ngừng hợp tác'}">
+        {{ supplier.status }}
+      </li>
+      <li class="content_body_item">
+        <button class="content_body_button" (click)="openModal(supplier)">Sửa</button>
+        <button class="content_body_button" (click)="openDeleteModal(supplier.id)">Xóa</button>
+      </li>
+    </ul>    
+  </div>
+
+  <div class="pagination">
+    <button (click)="goToFirstPage()" [disabled]="currentPage === 1"><i class="fa-solid fa-angles-left"></i></button>
+    <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1"><i class="fa-solid fa-angle-left"></i></button>
+    
+    <span *ngFor="let page of pages">
+      <button *ngIf="page !== -1" [ngClass]="{'active': currentPage === page}" (click)="changePage(page)" [disabled]="currentPage === page">{{ page }}</button>
+      <span *ngIf="page === -1">...</span>
+    </span>
+    
+    <button (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages"><i class="fa-solid fa-angle-right"></i></button>
+    <button (click)="goToLastPage()" [disabled]="currentPage === totalPages"><i class="fa-solid fa-angles-right"></i></button>
+  </div>
+</div>
+
+<ng-template #supplierModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">{{ currentSupplier.id ? 'Sửa nhà cung cấp' : 'Thêm nhà cung cấp' }}</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <label>Tên</label>
+    <input type="text" class="form-control mb-3" [(ngModel)]="currentSupplier.name">
+    <label>Địa chỉ</label>
+    <input type="text" class="form-control mb-3" [(ngModel)]="currentSupplier.address">
+    <label>Trạng thái</label>
+    <select class="form-select" [(ngModel)]="currentSupplier.status">
+      <option value="Đang hợp tác">Đang hợp tác</option>
+      <option value="Tạm ngừng hợp tác">Tạm ngừng hợp tác</option>
+    </select>
+  </div>
+  <div *ngIf="errorMessage" class="alert alert-danger mx-3">{{ errorMessage }}</div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cancel click')">Hủy</button>
+    <button type="button" class="btn btn-primary" (click)="saveSupplier()">Lưu</button>
+  </div>
+</ng-template>
+
+<ng-template #deleteModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Xác nhận xóa</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <p class="mb-0">Bạn có chắc chắn muốn xóa nhà cung cấp này không?</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cancel click')">Hủy</button>
+    <button type="button" class="btn btn-danger" (click)="confirmDelete(); modal.close()">Xóa</button>
+  </div>
+</ng-template>
+

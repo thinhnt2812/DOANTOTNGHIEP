@@ -1,0 +1,141 @@
+<div class="content">
+  <p class="content_title">Danh sách nhập hàng</p>
+  <div class="content_action">
+    <button class="content_add_button" (click)="openModal()">Nhập hàng</button>
+    <button class="btn btn-danger" (click)="openBulkDeleteModal()">Xóa hàng loạt</button>
+    <button class="btn btn-success" (click)="exportToExcel()">Xuất Excel</button>
+    <input type="text" class="form-control ms-auto" [(ngModel)]="searchTerm" (input)="onSearchTermChange()" placeholder="Tìm kiếm nhập hàng...">
+    <button class="btn btn-primary" (click)="searchImportGoods()">Tìm kiếm</button>
+  </div>
+  <div class="content_table">
+    <ul class="content_table_header">
+      <li class="content_header_item">
+        <div class="checkbox-wrapper-31">
+          <input type="checkbox" [(ngModel)]="selectAll" (change)="toggleSelectAll($event)"/>
+          <svg viewBox="0 0 35.6 35.6">
+            <circle class="background" cx="17.8" cy="17.8" r="17.8"></circle>
+            <circle class="stroke" cx="17.8" cy="17.8" r="14.37"></circle>
+            <polyline class="check" points="11.78 18.12 15.55 22.23 25.17 12.87"></polyline>
+          </svg>
+        </div>
+      </li>
+      <li class="content_header_item" (click)="sortImportGoods('id')">ID <i class="fa-solid" [ngClass]="{'fa-sort': sortKey !== 'id', 'fa-arrow-down-short-wide': sortKey === 'id' && sortDirection === 'asc', 'fa-arrow-down-wide-short': sortKey === 'id' && sortDirection === 'desc'}"></i></li>
+      <li class="content_header_item" (click)="sortImportGoods('nameproduct')">Tên sản phẩm <i class="fa-solid" [ngClass]="{'fa-sort': sortKey !== 'nameproduct', 'fa-arrow-down-short-wide': sortKey === 'nameproduct' && sortDirection === 'asc', 'fa-arrow-down-wide-short': sortKey === 'nameproduct' && sortDirection === 'desc'}"></i></li>
+      <li class="content_header_item" (click)="sortImportGoods('type')">Loại <i class="fa-solid" [ngClass]="{'fa-sort': sortKey !== 'type', 'fa-arrow-down-short-wide': sortKey === 'type' && sortDirection === 'asc', 'fa-arrow-down-wide-short': sortKey === 'type' && sortDirection === 'desc'}"></i></li>
+      <li class="content_header_item" (click)="sortImportGoods('supplier')">Nhà cung cấp <i class="fa-solid" [ngClass]="{'fa-sort': sortKey !== 'supplier', 'fa-arrow-down-short-wide': sortKey === 'supplier' && sortDirection === 'asc', 'fa-arrow-down-wide-short': sortKey === 'supplier' && sortDirection === 'desc'}"></i></li>
+      <li class="content_header_item" (click)="sortImportGoods('quantity')">Số lượng <i class="fa-solid" [ngClass]="{'fa-sort': sortKey !== 'quantity', 'fa-arrow-down-short-wide': sortKey === 'quantity' && sortDirection === 'asc', 'fa-arrow-down-wide-short': sortKey === 'quantity' && sortDirection === 'desc'}"></i></li>
+      <li class="content_header_item" (click)="sortImportGoods('price')">Giá nhập <i class="fa-solid" [ngClass]="{'fa-sort': sortKey !== 'price', 'fa-arrow-down-short-wide': sortKey === 'price' && sortDirection === 'asc', 'fa-arrow-down-wide-short': sortKey === 'price' && sortDirection === 'desc'}"></i></li>
+      <li class="content_header_item" (click)="sortImportGoods('date')">Ngày nhập <i class="fa-solid" [ngClass]="{'fa-sort': sortKey !== 'date', 'fa-arrow-down-short-wide': sortKey === 'date' && sortDirection === 'asc', 'fa-arrow-down-wide-short': sortKey === 'date' && sortDirection === 'desc'}"></i></li>
+      <li class="content_header_item">Hành động</li>
+    </ul>
+    <ul class="content_table_body" *ngFor="let importGood of paginatedImportGoods">
+      <li class="content_body_item">
+        <div class="checkbox-wrapper-31">
+          <input type="checkbox" [(ngModel)]="importGood.selected" (change)="onCheckboxChange()"/>
+          <svg viewBox="0 0 35.6 35.6">
+            <circle class="background" cx="17.8" cy="17.8" r="17.8"></circle>
+            <circle class="stroke" cx="17.8" cy="17.8" r="14.37"></circle>
+            <polyline class="check" points="11.78 18.12 15.55 22.23 25.17 12.87"></polyline>
+          </svg>
+        </div>
+      </li>
+      <li class="content_body_item">{{ importGood.id }}</li>
+      <li class="content_body_item">{{ importGood.nameproduct }}</li>
+      <li class="content_body_item">{{ importGood.type }}</li>
+      <li class="content_body_item">{{ importGood.supplier }}</li>
+      <li class="content_body_item">{{ importGood.quantity }}</li>
+      <li class="content_body_item">{{ importGood.price | number:'1.0-0' }}đ</li>
+      <li class="content_body_item">{{ importGood.date | date:'dd/MM/yyyy' }}</li>
+      <li class="content_body_item">
+        <button class="content_body_button" (click)="openModal(importGood)">Sửa</button>
+        <button class="content_body_button" (click)="openDeleteModal(importGood.id)">Xóa</button>
+      </li>
+    </ul>    
+  </div>
+
+  <div class="pagination">
+    <button (click)="goToFirstPage()" [disabled]="currentPage === 1"><i class="fa-solid fa-angles-left"></i></button>
+    <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1"><i class="fa-solid fa-angle-left"></i></button>
+    
+    <span *ngFor="let page of pages">
+      <button *ngIf="page !== -1" [ngClass]="{'active': currentPage === page}" (click)="changePage(page)" [disabled]="currentPage === page">{{ page }}</button>
+      <span *ngIf="page === -1">...</span>
+    </span>
+    
+    <button (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages"><i class="fa-solid fa-angle-right"></i></button>
+    <button (click)="goToLastPage()" [disabled]="currentPage === totalPages"><i class="fa-solid fa-angles-right"></i></button>
+  </div>
+</div>
+
+<ng-template #importGoodModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">{{ currentImportGood.id ? 'Sửa thông tin nhập hàng' : 'Nhập hàng' }}</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <label>Tên sản phẩm</label>
+    <div class="name_options">
+      <label class="name_options_label">
+        <input type="radio" id="existingProduct" name="productOption" [(ngModel)]="currentImportGood.isNewProduct" [value]="false" (change)="onProductOptionChange()">
+        <label for="existingProduct">Đang có</label>
+      </label>
+      <label class="name_options_label">
+        <input type="radio" id="newProduct" name="productOption" [(ngModel)]="currentImportGood.isNewProduct" [value]="true" (change)="onProductOptionChange()">
+        <label for="newProduct">Nhập mới</label>
+      </label>
+    </div>
+    <div class="mb-3">
+      <select *ngIf="!currentImportGood.isNewProduct" class="form-select" [(ngModel)]="currentImportGood.nameproduct" (change)="onExistingProductChange()">
+        <option *ngFor="let product of productOptions" [value]="product.name">{{ product.name }}</option>
+      </select>
+      <input *ngIf="currentImportGood.isNewProduct" type="text" class="form-control" [(ngModel)]="currentImportGood.nameproduct">
+    </div>
+    <label>Loại</label>
+    <select class="form-select mb-3" [(ngModel)]="currentImportGood.type" [disabled]="!currentImportGood.isNewProduct">
+      <option *ngFor="let category of activeCategories" [value]="category.name">{{ category.name }}</option>
+    </select>
+    <label>Nhà cung cấp</label>
+    <select class="form-select mb-3" [(ngModel)]="currentImportGood.supplier" [disabled]="!currentImportGood.isNewProduct">
+      <option *ngFor="let supplier of activeSuppliers" [value]="supplier.name">{{ supplier.name }}</option>
+    </select>
+    <label>Số lượng</label>
+    <input type="number" class="form-control mb-3" [(ngModel)]="currentImportGood.quantity">
+    <label>Giá nhập (VND)</label>
+    <input type="number" class="form-control mb-3" [(ngModel)]="currentImportGood.price">
+    <label>Ngày nhập</label>
+    <input type="date" class="form-control" [(ngModel)]="currentImportGood.date">
+  </div>
+  <div *ngIf="errorMessage" class="alert alert-danger mx-3">{{ errorMessage }}</div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cancel click')">Hủy</button>
+    <button type="button" class="btn btn-primary" (click)="saveImportGood()">Lưu</button>
+  </div>
+</ng-template>
+
+<ng-template #deleteModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Xác nhận xóa</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <p class="mb-0">Bạn có chắc chắn muốn xóa nhập hàng này không?</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cancel click')">Hủy</button>
+    <button type="button" class="btn btn-danger" (click)="confirmDelete(); modal.close()">Xóa</button>
+  </div>
+</ng-template>
+
+<ng-template #bulkDeleteModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Xác nhận xóa hàng loạt</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <p class="mb-0">Bạn có chắc chắn muốn xóa các ô đã chọn không?</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cancel click')">Hủy</button>
+    <button type="button" class="btn btn-danger" (click)="confirmBulkDelete(); modal.close()">Xóa</button>
+  </div>
+</ng-template>

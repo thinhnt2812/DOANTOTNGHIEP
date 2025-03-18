@@ -1,0 +1,61 @@
+.header{
+    height: 68px;
+    width: 100%;
+    background-color: var(--main-color);
+    padding: 0 40px;
+    display: flex;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    justify-content: space-between;
+    z-index: 1000;
+    user-select: none;
+}
+.header_logo{
+    height: 50px;
+    width: auto;
+    object-fit: contain;
+}
+.header_user_contact{
+    color: white;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    border-radius: 50px;
+    text-decoration: none;
+}
+.header_user_contact:hover{
+    background-color: var(--hover-bgr);
+}
+.header_user_contact_icon{
+    font-size: 20px;
+}
+.header_user{
+    display: flex;
+    gap: 60px;
+    align-items: center;
+}
+.header_user_line{
+    display: block;
+    height: 30px;
+    width: 1px;
+    background-color: white;
+}
+.header_user_name{
+    color: white;
+    font-size: 15px;
+    display: flex;
+    gap: 10px;
+}
+.header_user_out:hover{
+    cursor: pointer;
+    color: var(--hover-color);
+}
+.header_user_name span:nth-child(1){
+    font-weight: bold;
+    color: var(--hover-color);
+    padding-right: 10px;
+    border-right: 1px solid white;
+}

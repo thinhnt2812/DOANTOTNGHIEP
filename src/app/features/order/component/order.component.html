@@ -1,0 +1,108 @@
+<div class="order">
+    <div class="container">
+        <form (ngSubmit)="onSubmit(content)">
+          <div class="order_left">
+            <div class="order_left_top">
+              <p class="order_left_top_title">Tìm kiếm sản phẩm <span class="icon_close_mbl"><i class="fa-solid fa-xmark"></i></span></p>
+              <div class="left_top_top">
+                <div class="left_top_select">
+                  <select class="form_select" [(ngModel)]="order.productcategory" name="productcategory" (change)="onCategoryChange()" required>
+                      <option value="">Tất cả danh mục</option>
+                      <option *ngFor="let category of categories" [value]="category.name">{{ category.name }}</option>
+                  </select>
+                </div>
+                <div class="input-container">
+                  <input type="text" name="text" class="input" placeholder="Tên sản phẩm" [(ngModel)]="productSearch" name="productSearch" (ngModelChange)="onProductSearch()" >
+                  <span class="icon"> 
+                    <svg width="19px" height="19px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path opacity="1" d="M14 5H20" stroke="#000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> <path opacity="1" d="M14 8H17" stroke="#000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M21 11.5C21 16.75 16.75 21 11.5 21C6.25 21 2 16.75 2 11.5C2 6.25 6.25 2 11.5 2" stroke="#000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path> <path opacity="1" d="M22 22L20 20" stroke="#000" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="left_buttom">
+              <p class="order_left_top_label">Chọn sản phẩm:</p>
+              <div class="product_list">
+                <div>
+                  <div *ngFor="let product of filteredProducts" 
+                       class="btn_ctm" 
+                       [class.selected]="selectedProduct?.name === product.name" 
+                       (click)="onProductSelect(product)">
+                    {{ product.name }} <br>
+                    <span>
+                      {{ product.price ? (product.price | number:'1.0-0') + 'đ' : '' }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="order_right">
+            <div class="order_right_top">
+              <h4>Thông tin khách hàng</h4>
+              <div class="input-container">
+                <input autocomplete="off" required="" id="input" type="text" [(ngModel)]="order.customername" name="customername"/>
+                <label class="label" for="input">Họ và tên</label>
+                <div class="underline"></div>
+              </div>
+              <div class="input-container">
+                <input autocomplete="off" required="" id="input" type="text" [(ngModel)]="order.customerphone" name="customerphone"/>
+                <label class="label" for="input">Số điện thoại</label>
+                <div class="underline"></div>
+              </div>
+            </div>
+            <div class="order_right_buttom">
+              <div class="order_day mb-2">
+                <p class="mb-0">Ngày mua:</p>
+                <input type="date" class="right_top_day" [(ngModel)]="order.purchasedate" name="purchasedate" required disabled>
+              </div>
+              <div class="order_detail" *ngIf="selectedProduct">
+                <p class="mb-2">Tên: <span class="order_detail_name">{{ selectedProduct.name }}</span></p>
+                <p class="mb-2">Giá: <span class="order_detail_price">{{ selectedProduct.price | number:'1.0-0' }}đ</span></p>
+                <p class="mb-1">Số Lượng:</p>
+                <div class="order_detail_quatity mb-2">
+                  <button class="detail_quatity_btn" type="button" (click)="decreaseQuantity()">-</button>
+                  <input id="quantity" class="detail_quatity_inp" [(ngModel)]="order.quantity" name="quantity" (change)="onQuantityChange()" required>
+                  <button class="detail_quatity_btn detail_quatity_btn2" type="button" (click)="increaseQuantity()">+</button>
+                </div>              
+                <p class="mb-2">Tổng tiền: <span class="order_detail_price">{{ order.intomoney | number:'1.0-0' }}đ</span></p>
+              </div>
+              <button type="submit" class="fancy" href="#">
+                <span class="top-key"></span>
+                <span class="text">Tạo đơn</span>
+                <span class="bottom-key-1"></span>
+                <span class="bottom-key-2"></span>
+              </button>
+            </div>
+          </div>
+        </form>
+    </div>      
+</div>
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">{{ modalTitle }}</h4> 
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <div *ngIf="createdOrder; else validationMessageTemplate">
+      <p><strong style="font-size: 24px;">Chi tiết đơn hàng</strong></p>
+      <p><strong>Mã đơn:</strong> {{ createdOrder.id }}</p>
+      <p><strong>Khách hàng:</strong> {{ createdOrder.customername }}</p>
+      <p><strong>Số điện thoại:</strong> {{ createdOrder.customerphone }}</p>
+      <p><strong>Ngày mua:</strong> {{ createdOrder.purchasedate }}</p>
+      <p><strong>Sản phẩm:</strong> {{ createdOrder.purchasedproduct }}</p>
+      <p><strong>Số lượng:</strong> {{ createdOrder.quantity }}</p>
+      <p><strong>Đơn giá:</strong> {{ createdOrder.unitprice | number:'1.0-0' }}đ</p>
+      <p><strong>Tổng tiền:</strong> {{ createdOrder.intomoney | number:'1.0-0' }}đ</p>
+      <button class="btn btn-primary" (click)="printOrder()">In hóa đơn</button>
+    </div>
+    <ng-template #validationMessageTemplate>
+      {{ validationMessage }}
+    </ng-template>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="modal.close('Close click')">Đóng</button>
+  </div>
+</ng-template>
+

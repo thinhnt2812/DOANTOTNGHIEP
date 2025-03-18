@@ -1,0 +1,438 @@
+<div class="main">
+    <nav>
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+          <button class="nav-link active" id="nav-nv-tab" data-bs-toggle="tab" data-bs-target="#nav-nv" type="button" role="tab" aria-controls="nav-nv" aria-selected="true">Nhân viên</button>
+          <button class="nav-link" id="nav-sp-tab" data-bs-toggle="tab" data-bs-target="#nav-sp" type="button" role="tab" aria-controls="nav-sp" aria-selected="false">Sản phẩm</button>
+          <button class="nav-link" id="nav-dmsp-tab" data-bs-toggle="tab" data-bs-target="#nav-dmsp" type="button" role="tab" aria-controls="nav-dmsp" aria-selected="false">Danh mục sản phẩm</button>
+          <button class="nav-link" id="nav-ncc-tab" data-bs-toggle="tab" data-bs-target="#nav-ncc" type="button" role="tab" aria-controls="nav-ncc" aria-selected="false">Nhà cung cấp</button>
+          <button class="nav-link" id="nav-nh-tab" data-bs-toggle="tab" data-bs-target="#nav-nh" type="button" role="tab" aria-controls="nav-nh" aria-selected="false">Nhập hàng</button>
+          <button class="nav-link" id="nav-dh-tab" data-bs-toggle="tab" data-bs-target="#nav-dh" type="button" role="tab" aria-controls="nav-dh" aria-selected="false">Đơn hàng</button>
+          <button class="nav-link" id="nav-tk-tab" data-bs-toggle="tab" data-bs-target="#nav-tk" type="button" role="tab" aria-controls="nav-tk" aria-selected="false">Tài khoản</button>
+          <button class="nav-link" id="nav-dt-tab" data-bs-toggle="tab" data-bs-target="#nav-dt" type="button" role="tab" aria-controls="nav-dt" aria-selected="false">Doanh thu</button>
+        </div>
+    </nav>
+    <div class="tab-content" id="nav-tabContent">
+        <!-- Nhân viên -->
+        <div class="tab-pane fade show active" id="nav-nv" role="tabpanel" aria-labelledby="nav-nv-tab" tabindex="0">
+            <div class="ep_report">
+                <ul class="ep_list">
+                    <li>
+                        <strong>{{ totalEmployees }}</strong>
+                        Tổng số nhân viên
+                        <i class="fa-solid fa-users-rectangle"></i>
+                    </li>
+                    <li>
+                        <strong>{{ activeEmployees }}</strong>
+                        Nhân viên đang làm việc
+                        <i class="fa-solid fa-users"></i>
+                    </li>
+                    <li>
+                        <strong>{{ resignedEmployees }}</strong>
+                        Nhân viên đã nghỉ
+                        <i class="fa-solid fa-users-slash"></i>
+                    </li>
+                    <li>
+                        <strong>{{ newEmployees }}</strong>
+                        Nhân viên mới ( < 30 ngày )
+                        <i class="fa-solid fa-user-plus"></i>
+                    </li>
+                </ul>
+                <div class="employee-pie-chart">
+                    <canvas #employeePieChart></canvas>
+                </div>
+            </div>  
+        </div>
+        <!-- Sản phẩm -->
+        <div class="tab-pane fade" id="nav-sp" role="tabpanel" aria-labelledby="nav-sp-tab" tabindex="0">
+            <div class="ep_report">
+                <ul class="ep_list">
+                    <li>
+                        <strong>{{ totalProducts }}</strong>
+                        Tổng số sản phẩm
+                        <i class="fa-solid fa-boxes-stacked"></i>
+                    </li>
+                    <li>
+                        <strong>{{ activeProducts }}</strong>
+                        Sản phẩm đang bán
+                        <i class="fa-solid fa-shop"></i>
+                    </li>
+                    <li>
+                        <strong>{{ notYetSoldProducts }}</strong>
+                        Sản phẩm chưa bán
+                        <i class="fa-solid fa-hourglass-start"></i>
+                    </li>
+                    <li>
+                        <strong>{{ outOfStockProducts }}</strong>
+                        Sản phẩm đã dừng bán
+                        <i class="fa-solid fa-shop-slash"></i>
+                    </li>
+                </ul>
+                <div class="employee-pie-chart">
+                    <canvas #productPieChart></canvas>
+                </div>
+            </div>
+        </div>
+        <!-- Danh mục sản phẩm -->
+        <div class="tab-pane fade" id="nav-dmsp" role="tabpanel" aria-labelledby="nav-dmsp-tab" tabindex="0">
+            <div class="ep_report">
+                <ul class="ep_list ep_list2">
+                    <li>
+                        <strong>{{ totalCategories }}</strong>
+                        Tổng số danh mục
+                        <i class="fa-solid fa-layer-group"></i>
+                    </li>
+                    <li>
+                        <strong>{{ activeCategories }}</strong>
+                        Danh mục đang hoạt động
+                        <i class="fa-solid fa-check-circle"></i>
+                    </li>
+                    <li>
+                        <strong>{{ inactiveCategories }}</strong>
+                        Danh mục đã ngừng hoạt động
+                        <i class="fa-solid fa-times-circle"></i>
+                    </li>
+                </ul>
+                <div class="employee-pie-chart">
+                    <canvas #categoryPieChart></canvas>
+                </div>
+            </div>
+        </div>
+        <!-- Nhà cung cấp -->
+        <div class="tab-pane fade" id="nav-ncc" role="tabpanel" aria-labelledby="nav-ncc-tab" tabindex="0">
+            <div class="ep_report">
+                <ul class="ep_list ep_list2">
+                    <li>
+                        <strong>{{ totalSuppliers }}</strong>
+                        Tổng số nhà cung cấp
+                        <i class="fa-solid fa-truck"></i>
+                    </li>
+                    <li>
+                        <strong>{{ activeSuppliers }}</strong>
+                        Nhà cung cấp đang hoạt động
+                        <i class="fa-solid fa-handshake-simple"></i>
+                    </li>
+                    <li>
+                        <strong>{{ inactiveSuppliers }}</strong>
+                        Nhà cung cấp đã ngừng hợp tác
+                        <i class="fa-solid fa-handshake-slash"></i>
+                    </li>
+                </ul>
+                <div class="employee-pie-chart">
+                    <canvas #supplierPieChart></canvas>
+                </div>
+            </div>
+        </div>
+        <!-- Nhập hàng -->
+        <div class="tab-pane fade" id="nav-nh" role="tabpanel" aria-labelledby="nav-nh-tab" tabindex="0">
+            <div class="order_report">
+                <div class="order_report_filter">
+                    <div class="order_filter_content">
+                        <div>
+                            <label>Từ ngày:</label>
+                            <input type="date" [(ngModel)]="startImportDate">
+                        </div>
+                        <div>
+                            <label>Đến ngày:</label>
+                            <input type="date" [(ngModel)]="endImportDate">
+                        </div>
+                    </div>
+                    <button (click)="filterImports(notificationModal)">Lọc</button>
+                    <button (click)="exportImportsToExcel()">Xuất Excel</button>
+                </div>
+                <div class="order_top">
+                    <p *ngIf="filteredImports.length > 0" class="order_report_total">Tổng số hàng nhập: <span>{{ totalImportStatistics }}</span></p>
+                    <p *ngIf="filteredImports.length > 0" class="order_report_total">
+                        Tổng tiền đã nhập hàng: <span>{{ totalImportAmount | number:'1.0-0' }}đ</span>
+                    </p>
+                </div>
+                <div *ngIf="filteredImports.length > 0" class="order_list">
+                    <div class="order_list_header">
+                        <div (click)="sortImportsBy('id')">
+                            Mã nhập hàng
+                            <span>
+                                <i class="fa-solid" [ngClass]="{
+                                    'fa-sort': currentImportSortField !== 'id',
+                                    'fa-arrow-down-short-wide': currentImportSortField === 'id' && currentImportSortDirection === 'asc',
+                                    'fa-arrow-down-wide-short': currentImportSortField === 'id' && currentImportSortDirection === 'desc'
+                                }"></i>
+                            </span>
+                        </div>
+                        <div (click)="sortImportsBy('nameproduct')">
+                            Tên sản phẩm
+                            <span>
+                                <i class="fa-solid" [ngClass]="{
+                                    'fa-sort': currentImportSortField !== 'nameproduct',
+                                    'fa-arrow-down-short-wide': currentImportSortField === 'nameproduct' && currentImportSortDirection === 'asc',
+                                    'fa-arrow-down-wide-short': currentImportSortField === 'nameproduct' && currentImportSortDirection === 'desc'
+                                }"></i>
+                            </span>
+                        </div>
+                        <div (click)="sortImportsBy('type')">
+                            Danh mục sản phẩm
+                            <span>
+                                <i class="fa-solid" [ngClass]="{
+                                    'fa-sort': currentImportSortField !== 'type',
+                                    'fa-arrow-down-short-wide': currentImportSortField === 'type' && currentImportSortDirection === 'asc',
+                                    'fa-arrow-down-wide-short': currentImportSortField === 'type' && currentImportSortDirection === 'desc'
+                                }"></i>
+                            </span>
+                        </div>
+                        <div (click)="sortImportsBy('supplier')">
+                            Nhà cung cấp
+                            <span>
+                                <i class="fa-solid" [ngClass]="{
+                                    'fa-sort': currentImportSortField !== 'supplier',
+                                    'fa-arrow-down-short-wide': currentImportSortField === 'supplier' && currentImportSortDirection === 'asc',
+                                    'fa-arrow-down-wide-short': currentImportSortField === 'supplier' && currentImportSortDirection === 'desc'
+                                }"></i>
+                            </span>
+                        </div>
+                        <div (click)="sortImportsBy('quantity')">
+                            Số lượng
+                            <span>
+                                <i class="fa-solid" [ngClass]="{
+                                    'fa-sort': currentImportSortField !== 'quantity',
+                                    'fa-arrow-down-short-wide': currentImportSortField === 'quantity' && currentImportSortDirection === 'asc',
+                                    'fa-arrow-down-wide-short': currentImportSortField === 'quantity' && currentImportSortDirection === 'desc'
+                                }"></i>
+                            </span>
+                        </div>
+                        <div (click)="sortImportsBy('price')">
+                            Giá nhập
+                            <span>
+                                <i class="fa-solid" [ngClass]="{
+                                    'fa-sort': currentImportSortField !== 'price',
+                                    'fa-arrow-down-short-wide': currentImportSortField === 'price' && currentImportSortDirection === 'asc',
+                                    'fa-arrow-down-wide-short': currentImportSortField === 'price' && currentImportSortDirection === 'desc'
+                                }"></i>
+                            </span>
+                        </div>
+                        <div (click)="sortImportsBy('date')">
+                            Ngày nhập
+                            <span>
+                                <i class="fa-solid" [ngClass]="{
+                                    'fa-sort': currentImportSortField !== 'date',
+                                    'fa-arrow-down-short-wide': currentImportSortField === 'date' && currentImportSortDirection === 'asc',
+                                    'fa-arrow-down-wide-short': currentImportSortField === 'date' && currentImportSortDirection === 'desc'
+                                }"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="order_list_content" *ngFor="let importItem of paginatedImports">
+                        <div>{{ importItem.id }}</div>
+                        <div>{{ importItem.nameproduct }}</div>
+                        <div>{{ importItem.type }}</div>
+                        <div>{{ importItem.supplier }}</div>
+                        <div>{{ importItem.quantity }}</div>
+                        <div>{{ importItem.price | number:'1.0-0' }}đ</div>
+                        <div>{{ importItem.date | date: 'dd/MM/yyyy' }}</div>
+                    </div>
+                </div>
+                <div class="pagination">
+                    <button (click)="goToFirstImportPage()" [disabled]="currentImportPage === 1"><i class="fa-solid fa-angles-left"></i></button>
+                    <button (click)="changeImportPage(currentImportPage - 1)" [disabled]="currentImportPage === 1"><i class="fa-solid fa-angle-left"></i></button>
+                    
+                    <span *ngFor="let page of importPages">
+                        <button *ngIf="page !== -1" [ngClass]="{'active': currentImportPage === page}" (click)="changeImportPage(page)" [disabled]="currentImportPage === page">{{ page }}</button>
+                        <span *ngIf="page === -1">...</span>
+                    </span>
+                    
+                    <button (click)="changeImportPage(currentImportPage + 1)" [disabled]="currentImportPage === totalImportPages"><i class="fa-solid fa-angle-right"></i></button>
+                    <button (click)="goToLastImportPage()" [disabled]="currentImportPage === totalImportPages"><i class="fa-solid fa-angles-right"></i></button>
+                </div>
+                <div *ngIf="filteredImports.length === 0" class="no_orders">
+                   Không có hàng nhập nào trong khoảng thời gian này
+                </div>
+            </div>
+        </div>
+        <!-- Đơn hàng -->
+        <div class="tab-pane fade" id="nav-dh" role="tabpanel" aria-labelledby="nav-dh-tab" tabindex="0">
+            <div class="order_report">
+                <div class="order_report_filter">
+                    <div class="order_filter_content">
+                        <div>
+                            <label>Từ ngày:</label>
+                            <input type="date" [(ngModel)]="startDate">
+                        </div>
+                        <div>
+                            <label>Đến ngày:</label>
+                            <input type="date" [(ngModel)]="endDate">
+                        </div>
+                    </div>
+                    <button (click)="filterOrders(notificationModal)">Lọc</button>
+                    <button (click)="exportOrdersToExcel()">Xuất Excel</button>
+                </div>
+                <div class="order_top">
+                    <p *ngIf="filteredOrders.length > 0" class="order_report_total">Tổng số đơn hàng: <span>{{ totalOrdertatistics }}</span></p>
+                    <p *ngIf="filteredOrders.length > 0" class="order_report_total">
+                        Tổng tiền đã bán: <span>{{ totalOrderAmount | number:'1.0-0' }}đ</span>
+                    </p>
+                </div>
+                <div *ngIf="filteredOrders.length > 0" class="order_list">
+                    <div class="order_list_header">
+                        <div (click)="sortOrdersBy('id')">
+                            Mã đơn hàng
+                            <span>
+                                <i class="fa-solid" [ngClass]="{
+                                    'fa-sort': currentOrderSortField !== 'id',
+                                    'fa-arrow-down-short-wide': currentOrderSortField === 'id' && currentOrderSortDirection === 'asc',
+                                    'fa-arrow-down-wide-short': currentOrderSortField === 'id' && currentOrderSortDirection === 'desc'
+                                }"></i>
+                            </span>
+                        </div>
+                        <div (click)="sortOrdersBy('customername')">
+                            Tên khách hàng
+                            <span>
+                                <i class="fa-solid" [ngClass]="{
+                                    'fa-sort': currentOrderSortField !== 'customername',
+                                    'fa-arrow-down-short-wide': currentOrderSortField === 'customername' && currentOrderSortDirection === 'asc',
+                                    'fa-arrow-down-wide-short': currentOrderSortField === 'customername' && currentOrderSortDirection === 'desc'
+                                }"></i>
+                            </span>
+                        </div>
+                        <div (click)="sortOrdersBy('customerphone')">
+                            Số điện thoại
+                            <span>
+                                <i class="fa-solid" [ngClass]="{
+                                    'fa-sort': currentOrderSortField !== 'customerphone',
+                                    'fa-arrow-down-short-wide': currentOrderSortField === 'customerphone' && currentOrderSortDirection === 'asc',
+                                    'fa-arrow-down-wide-short': currentOrderSortField === 'customerphone' && currentOrderSortDirection === 'desc'
+                                }"></i>
+                            </span>
+                        </div>
+                        <div (click)="sortOrdersBy('purchasedate')">
+                            Ngày mua hàng
+                            <span>
+                                <i class="fa-solid" [ngClass]="{
+                                    'fa-sort': currentOrderSortField !== 'purchasedate',
+                                    'fa-arrow-down-short-wide': currentOrderSortField === 'purchasedate' && currentOrderSortDirection === 'asc',
+                                    'fa-arrow-down-wide-short': currentOrderSortField === 'purchasedate' && currentOrderSortDirection === 'desc'
+                                }"></i>
+                            </span>
+                        </div>
+                        <div (click)="sortOrdersBy('purchasedproduct')">
+                            Sản phẩm
+                            <span>
+                                <i class="fa-solid" [ngClass]="{
+                                    'fa-sort': currentOrderSortField !== 'purchasedproduct',
+                                    'fa-arrow-down-short-wide': currentOrderSortField === 'purchasedproduct' && currentOrderSortDirection === 'asc',
+                                    'fa-arrow-down-wide-short': currentOrderSortField === 'purchasedproduct' && currentOrderSortDirection === 'desc'
+                                }"></i>
+                            </span>
+                        </div>
+                        <div (click)="sortOrdersBy('quantity')">
+                            Số lượng
+                            <span>
+                                <i class="fa-solid" [ngClass]="{
+                                    'fa-sort': currentOrderSortField !== 'quantity',
+                                    'fa-arrow-down-short-wide': currentOrderSortField === 'quantity' && currentOrderSortDirection === 'asc',
+                                    'fa-arrow-down-wide-short': currentOrderSortField === 'quantity' && currentOrderSortDirection === 'desc'
+                                }"></i>
+                            </span>
+                        </div>
+                        <div (click)="sortOrdersBy('unitprice')">
+                            Đơn giá
+                            <span>
+                                <i class="fa-solid" [ngClass]="{
+                                    'fa-sort': currentOrderSortField !== 'unitprice',
+                                    'fa-arrow-down-short-wide': currentOrderSortField === 'unitprice' && currentOrderSortDirection === 'asc',
+                                    'fa-arrow-down-wide-short': currentOrderSortField === 'unitprice' && currentOrderSortDirection === 'desc'
+                                }"></i>
+                            </span>
+                        </div>
+                        <div (click)="sortOrdersBy('intomoney')">
+                            Thành tiền
+                            <span>
+                                <i class="fa-solid" [ngClass]="{
+                                    'fa-sort': currentOrderSortField !== 'intomoney',
+                                    'fa-arrow-down-short-wide': currentOrderSortField === 'intomoney' && currentOrderSortDirection === 'asc',
+                                    'fa-arrow-down-wide-short': currentOrderSortField === 'intomoney' && currentOrderSortDirection === 'desc'
+                                }"></i>
+                            </span>
+                        </div> 
+                    </div>
+                    <div class="order_list_content" *ngFor="let order of paginatedOrders">
+                        <div>{{ order.id }}</div>
+                        <div>{{ order.customername }}</div>
+                        <div>{{ order.customerphone }}</div>
+                        <div>{{ order.purchasedate | date: 'dd/MM/yyyy' }}</div>
+                        <div>{{ order.purchasedproduct }}</div>
+                        <div>{{ order.quantity }}</div>
+                        <div>{{ order.unitprice | number:'1.0-0' }}đ</div>
+                        <div>{{ order.intomoney | number:'1.0-0' }}đ</div>
+                    </div>
+                </div>
+                <div class="pagination">
+                    <button (click)="goToFirstPage()" [disabled]="currentPage === 1"><i class="fa-solid fa-angles-left"></i></button>
+                    <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1"><i class="fa-solid fa-angle-left"></i></button>
+                    
+                    <span *ngFor="let page of pages">
+                        <button *ngIf="page !== -1" [ngClass]="{'active': currentPage === page}" (click)="changePage(page)" [disabled]="currentPage === page">{{ page }}</button>
+                        <span *ngIf="page === -1">...</span>
+                    </span>
+                    
+                    <button (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages"><i class="fa-solid fa-angle-right"></i></button>
+                    <button (click)="goToLastPage()" [disabled]="currentPage === totalPages"><i class="fa-solid fa-angles-right"></i></button>
+                </div>
+                <div *ngIf="filteredOrders.length === 0" class="no_orders">
+                   Không có đơn hàng nào khoảng thời gian này
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="nav-tk" role="tabpanel" aria-labelledby="nav-tk-tab" tabindex="0">
+            <div class="ep_report">
+                <ul class="ep_list ep_list3">
+                    <li>
+                        <strong>{{ totalAccounts }}</strong>
+                        Tổng số tài khoản
+                        <i class="fa-solid fa-user"></i>
+                    </li>
+                    <li>
+                        <strong>{{ activeAccounts }}</strong>
+                        Tài khoản đang hoạt động
+                        <i class="fa-solid fa-user-check"></i>
+                    </li>
+                    <li>
+                        <strong>{{ inactiveAccounts }}</strong>
+                        Tài khoản đã dừng
+                        <i class="fa-solid fa-user-slash"></i>
+                    </li>
+                    <li>
+                        <strong>{{ adminAccounts }}</strong>
+                        Tài khoản Admin
+                        <i class="fa-solid fa-user-shield"></i>
+                    </li>
+                    <li>
+                        <strong>{{ userAccounts }}</strong>
+                        Tài khoản User
+                        <i class="fa-solid fa-user"></i>
+                    </li>
+                </ul>
+                <div class="pie_ctm">
+                    <div class="employee-pie-chart">
+                        <canvas #accountPieChart></canvas>
+                        <p>Biểu đồ trạng thái tài khoản</p>
+                    </div>
+                    <div class="employee-pie-chart">
+                        <canvas #accountRolePieChart></canvas>
+                        <p>Biểu đồ role tài khoản</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="nav-dt" role="tabpanel" aria-labelledby="nav-dt-tab" tabindex="0">Doanh thu</div>
+    </div>
+</div>
+
+<ng-template #notificationModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">Thông báo</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+        <p class="mb-0">{{ notificationMessage }}</p>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="modal.close('Close click')">Đóng</button>
+    </div>
+</ng-template>

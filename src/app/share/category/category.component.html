@@ -1,0 +1,36 @@
+<div class="category">
+    <ul class="category_list ps-0">
+        <li routerLink="employee" class="category_item" (click)="selectCategory('employee')" [class.selected]="selectedCategory === 'employee'">
+            <i class="fa-solid fa-users"></i>
+            Nhân viên
+        </li>
+        <li routerLink="product" class="category_item" (click)="selectCategory('product')" [class.selected]="selectedCategory === 'product'">
+            <i class="fa-solid fa-layer-group"></i>
+            Sản phẩm
+        </li>
+        <li routerLink="productcategory" class="category_item" (click)="selectCategory('productcategory')" [class.selected]="selectedCategory === 'productcategory'">
+            <i class="fa-solid fa-bars-staggered"></i>
+            Danh mục sản phẩm
+        </li>
+        <li routerLink="supplier" class="category_item" (click)="selectCategory('supplier')" [class.selected]="selectedCategory === 'supplier'">
+            <i class="fa-solid fa-truck"></i>
+            Nhà cung cấp
+        </li>
+        <li routerLink="importgoods" class="category_item" (click)="selectCategory('importgoods')" [class.selected]="selectedCategory === 'importgoods'">
+            <i class="fa-solid fa-boxes-packing"></i>
+            Nhập hàng
+        </li>
+        <li routerLink="ordermanagement" class="category_item" (click)="selectCategory('ordermanagement')" [class.selected]="selectedCategory === 'ordermanagement'">
+            <i class="fa-solid fa-cart-shopping"></i>
+            Đơn hàng
+        </li>
+        <li routerLink="account" class="category_item" (click)="selectCategory('account')" [class.selected]="selectedCategory === 'account'">
+            <i class="fa-solid fa-user-shield"></i>
+            Tài khoản
+        </li>
+        <li routerLink="statisticsreports" class="category_item" (click)="selectCategory('statisticsreports')" [class.selected]="selectedCategory === 'statisticsreports'">
+            <i class="fa-solid fa-chart-pie"></i>
+            Thống kê, báo cáo
+        </li>
+    </ul>
+</div>

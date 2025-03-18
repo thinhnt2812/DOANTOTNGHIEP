@@ -1,0 +1,25 @@
+.pagenotfound{
+    margin-left: 12%;
+    height: calc(100vh - 68px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;    
+    margin-top: 68px;       
+    user-select: none;
+}
+
+.pagenotfound img{
+    width: 40%;
+    height: auto;
+}
+
+.pagenotfound_title{
+    font-weight: bold;
+    font-style: italic;
+    font-size: 30px;
+}
+.pagenotfound_title span{
+    color: var(--hover-color);
+    font-size: 40px;
+}

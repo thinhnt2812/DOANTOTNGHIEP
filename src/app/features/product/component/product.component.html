@@ -1,0 +1,131 @@
+<div class="content">
+  <p class="content_title">Danh sách sản phẩm</p>
+  <div class="content_action">
+    <button class="content_add_button" (click)="openModal()">Thêm sản phẩm</button>
+    <div class="content_action_list">
+      <div class="content_action_item">
+        <p>Lọc theo danh mục:</p>
+        <select class="form-select" [(ngModel)]="filterType">
+          <option value="">Tất cả danh mục</option>
+          <option *ngFor="let category of activeCategories" [value]="category.name">{{ category.name }}</option>
+        </select>
+      </div>
+      <div class="content_action_item">
+        <p>Lọc theo nhà cung cấp:</p>
+        <select class="form-select" [(ngModel)]="filterSupplier">
+          <option value="">Tất cả nhà cung cấp</option>
+          <option *ngFor="let supplier of activeSuppliers" [value]="supplier.name">{{ supplier.name }}</option>
+        </select>
+      </div>
+      <div class="content_action_item">
+        <p>Lọc theo trạng thái:</p>
+        <select class="form-select" [(ngModel)]="filterStatus">
+          <option value="">Tất cả trạng thái</option>
+          <option value="Đang bán">Đang bán</option>
+          <option value="Đã dừng">Đã dừng</option>
+          <option value="Hàng nhập">Hàng nhập</option>
+        </select>
+      </div>
+      <input type="text" class="form-control" [(ngModel)]="searchTerm" placeholder="Tìm kiếm sản phẩm...">
+      <button class="content_add_button" (click)="applySearchAndFilters()">Xác nhận</button>
+    </div>
+  </div>
+  <div class="content_table">
+    <ul class="content_table_header">
+      <li class="content_header_item" (click)="sortProducts('id')">ID <i class="fa-solid" [ngClass]="{'fa-sort': sortKey !== 'id', 'fa-arrow-down-short-wide': sortKey === 'id' && sortDirection === 'asc', 'fa-arrow-down-wide-short': sortKey === 'id' && sortDirection === 'desc'}"></i></li>
+      <li class="content_header_item" (click)="sortProducts('name')">Tên sản phẩm <i class="fa-solid" [ngClass]="{'fa-sort': sortKey !== 'name', 'fa-arrow-down-short-wide': sortKey === 'name' && sortDirection === 'asc', 'fa-arrow-down-wide-short': sortKey === 'name' && sortDirection === 'desc'}"></i></li>
+      <li class="content_header_item" (click)="sortProducts('type')">Loại <i class="fa-solid" [ngClass]="{'fa-sort': sortKey !== 'type', 'fa-arrow-down-short-wide': sortKey === 'type' && sortDirection === 'asc', 'fa-arrow-down-wide-short': sortKey === 'type' && sortDirection === 'desc'}"></i></li>
+      <li class="content_header_item" (click)="sortProducts('size')">Kích thước <i class="fa-solid" [ngClass]="{'fa-sort': sortKey !== 'size', 'fa-arrow-down-short-wide': sortKey === 'size' && sortDirection === 'asc', 'fa-arrow-down-wide-short': sortKey === 'size' && sortDirection === 'desc'}"></i></li>
+      <li class="content_header_item" (click)="sortProducts('supplier')">Nhà cung cấp <i class="fa-solid" [ngClass]="{'fa-sort': sortKey !== 'supplier', 'fa-arrow-down-short-wide': sortKey === 'supplier' && sortDirection === 'asc', 'fa-arrow-down-wide-short': sortKey === 'supplier' && sortDirection === 'desc'}"></i></li>
+      <li class="content_header_item" (click)="sortProducts('quantity')">Số lượng <i class="fa-solid" [ngClass]="{'fa-sort': sortKey !== 'quantity', 'fa-arrow-down-short-wide': sortKey === 'quantity' && sortDirection === 'asc', 'fa-arrow-down-wide-short': sortKey === 'quantity' && sortDirection === 'desc'}"></i></li>
+      <li class="content_header_item" (click)="sortProducts('price')">Giá bán <i class="fa-solid" [ngClass]="{'fa-sort': sortKey !== 'price', 'fa-arrow-down-short-wide': sortKey === 'price' && sortDirection === 'asc', 'fa-arrow-down-wide-short': sortKey === 'price' && sortDirection === 'desc'}"></i></li>
+      <li class="content_header_item" (click)="sortProducts('importprice')">Giá nhập <i class="fa-solid" [ngClass]="{'fa-sort': sortKey !== 'importprice', 'fa-arrow-down-short-wide': sortKey === 'importprice' && sortDirection === 'asc', 'fa-arrow-down-wide-short': sortKey === 'importprice' && sortDirection === 'desc'}"></i></li>
+      <li class="content_header_item" (click)="sortProducts('status')">Trạng thái <i class="fa-solid" [ngClass]="{'fa-sort': sortKey !== 'status', 'fa-arrow-down-short-wide': sortKey === 'status' && sortDirection === 'asc', 'fa-arrow-down-wide-short': sortKey === 'status' && sortDirection === 'desc'}"></i></li>
+      <li class="content_header_item">Hành động</li>
+    </ul>
+    <ul class="content_table_body" *ngFor="let product of paginatedProducts">
+      <li class="content_body_item">{{ product.id }}</li>
+      <li class="content_body_item">{{ product.name }}</li>
+      <li class="content_body_item">{{ product.type }}</li>
+      <li class="content_body_item">{{ product.size }}</li>
+      <li class="content_body_item">{{ product.supplier }}</li>
+      <li class="content_body_item">{{ product.quantity }}</li>
+      <li class="content_body_item">{{ product.price ? (product.price | number:'1.0-0') + 'đ' : '' }}</li>
+      <li class="content_body_item">{{ product.importprice ? (product.importprice | number:'1.0-0') + 'đ' : '' }}</li>
+      <li class="content_body_item" [ngClass]="{'text-success': product.status === 'Đang bán', 'text-danger': product.status === 'Đã dừng'}">
+        {{ product.status }}
+      </li>
+      <li class="content_body_item">
+        <button [ngClass]="{'content_body_button': product.status !== 'Hàng nhập', 'content_body_button_up': product.status === 'Hàng nhập'}" (click)="openModal(product)">
+          {{ product.status === 'Hàng nhập' ? 'Bổ sung' : 'Sửa' }}
+        </button>
+        <button class="content_body_button" (click)="openDeleteModal(product.id)">Xóa</button>
+      </li>
+    </ul>    
+  </div>
+
+  <div class="pagination">
+    <button (click)="goToFirstPage()" [disabled]="currentPage === 1"><i class="fa-solid fa-angles-left"></i></button>
+    <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1"><i class="fa-solid fa-angle-left"></i></button>
+    
+    <span *ngFor="let page of pages">
+      <button *ngIf="page !== -1" [ngClass]="{'active': currentPage === page}" (click)="changePage(page)" [disabled]="currentPage === page">{{ page }}</button>
+      <span *ngIf="page === -1">...</span>
+    </span>
+    
+    <button (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages"><i class="fa-solid fa-angle-right"></i></button>
+    <button (click)="goToLastPage()" [disabled]="currentPage === totalPages"><i class="fa-solid fa-angles-right"></i></button>
+  </div>
+</div>
+
+<ng-template #productModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">{{ currentProduct.id ? 'Sửa sản phẩm' : 'Thêm sản phẩm' }}</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <label>Tên sản phẩm</label>
+    <input type="text" class="form-control mb-3" [(ngModel)]="currentProduct.name">
+    <label>Loại</label>
+    <select class="form-select mb-3" [(ngModel)]="currentProduct.type">
+      <option *ngFor="let category of activeCategories" [value]="category.name">{{ category.name }}</option>
+    </select>
+    <label>Kích thước</label>
+    <input type="text" class="form-control mb-3" [(ngModel)]="currentProduct.size">
+    <label>Nhà cung cấp</label>
+    <select class="form-select mb-3" [(ngModel)]="currentProduct.supplier">
+      <option *ngFor="let supplier of activeSuppliers" [value]="supplier.name">{{ supplier.name }}</option>
+    </select>
+    <label>Số lượng</label>
+    <input type="number" class="form-control mb-3" [(ngModel)]="currentProduct.quantity">
+    <label>Giá bán (VND)</label>
+    <input type="number" class="form-control mb-3 appearance: none;" [(ngModel)]="currentProduct.price">
+    <label>Giá nhập (VND)</label>
+    <input type="number" class="form-control mb-3 appearance: none;" [(ngModel)]="currentProduct.importprice">
+    <label>Trạng thái</label>
+    <select class="form-select" [(ngModel)]="currentProduct.status">
+      <option value="Đang bán">Đang bán</option>
+      <option value="Đã dừng">Đã dừng</option>
+    </select>
+  </div>
+  <div *ngIf="errorMessage" class="alert alert-danger mx-3">{{ errorMessage }}</div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cancel click')">Hủy</button>
+    <button type="button" class="btn btn-primary" (click)="saveProduct()">Lưu</button>
+  </div>
+</ng-template>
+
+<ng-template #deleteModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Xác nhận xóa</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <p class="mb-0">Bạn có chắc chắn muốn xóa sản phẩm này không?</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cancel click')">Hủy</button>
+    <button type="button" class="btn btn-danger" (click)="confirmDelete(); modal.close()">Xóa</button>
+  </div>
+</ng-template>
+
