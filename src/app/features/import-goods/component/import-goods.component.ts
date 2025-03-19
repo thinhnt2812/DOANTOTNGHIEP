@@ -36,6 +36,7 @@ export class ImportGoodsComponent implements OnInit {
   constructor(private importGoodsService: ImportGoodsService, private modalService: NgbModal, private productCategoryService: ProductCategoryService, private supplierService: SupplierService, private productService: ProductService) {}
 
   ngOnInit(): void {
+    // Khởi tạo dữ liệu khi component được tải
     document.title = 'Danh sách nhập hàng';
     this.loadImportGoods();
     this.loadCategories();
@@ -43,6 +44,7 @@ export class ImportGoodsComponent implements OnInit {
     this.loadProducts();
   }
 
+  // Tải danh sách nhập hàng từ dịch vụ
   loadImportGoods() {
     this.importGoodsService.getImportGoods().subscribe((data) => {
       this.importGoods = data;
@@ -50,34 +52,40 @@ export class ImportGoodsComponent implements OnInit {
     });
   }
 
+  // Tải danh sách danh mục sản phẩm đang hoạt động
   loadCategories() {
     this.productCategoryService.getCategories().subscribe((data) => {
       this.activeCategories = data.filter(category => category.status === 'Đang hoạt động');
     });
   }
 
+  // Tải danh sách nhà cung cấp đang hợp tác
   loadSuppliers() {
     this.supplierService.getSuppliers().subscribe((data) => {
       this.activeSuppliers = data.filter(supplier => supplier.status === 'Đang hợp tác');
     });
   }
 
+  // Tải danh sách sản phẩm
   loadProducts() {
     this.productService.getProducts().subscribe((data) => {
       this.productOptions = data;
     });
   }
 
+  // Cập nhật danh sách nhập hàng theo phân trang
   updatePaginatedImportGoods() {
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
     const endIndex = startIndex + this.itemsPerPage;
     this.paginatedImportGoods = this.importGoods.slice(startIndex, endIndex);
   }
 
+  // Lấy tổng số trang
   get totalPages(): number {
     return Math.ceil(this.importGoods.length / this.itemsPerPage);
   }
 
+  // Lấy danh sách các trang hiển thị
   get pages(): number[] {
     const totalPages = this.totalPages;
     const currentPage = this.currentPage;
@@ -105,20 +113,24 @@ export class ImportGoodsComponent implements OnInit {
     return pages;
   }
 
+  // Chuyển đến trang đầu tiên
   goToFirstPage() {
     this.changePage(1);
   }
 
+  // Chuyển đến trang cuối cùng
   goToLastPage() {
     this.changePage(this.totalPages);
   }
 
+  // Thay đổi trang hiện tại
   changePage(page: number) {
     if (page < 1 || page > this.totalPages) return;
     this.currentPage = page;
     this.updatePaginatedImportGoods();
   }
 
+  // Mở modal để thêm hoặc chỉnh sửa nhập hàng
   openModal(importGood: any = null) {
     this.currentImportGood = importGood ? { ...importGood } : {
       id: '',
@@ -133,6 +145,7 @@ export class ImportGoodsComponent implements OnInit {
     this.modalService.open(this.importGoodModal);
   }
 
+  // Xử lý khi thay đổi tùy chọn sản phẩm
   onProductOptionChange() {
     if (!this.currentImportGood.isNewProduct) {
       this.onExistingProductChange();
@@ -142,6 +155,7 @@ export class ImportGoodsComponent implements OnInit {
     }
   }
 
+  // Cập nhật thông tin sản phẩm khi chọn sản phẩm đã tồn tại
   onExistingProductChange() {
     const selectedProduct = this.productOptions.find(product => product.name === this.currentImportGood.nameproduct);
     if (selectedProduct) {
@@ -150,9 +164,14 @@ export class ImportGoodsComponent implements OnInit {
     }
   }
 
+  // Lưu thông tin nhập hàng
   saveImportGood() {
     if (!this.isFormValid()) {
       this.errorMessage = 'Vui lòng nhập đầy đủ thông tin.';
+      return;
+    }
+    if (new Date(this.currentImportGood.date) > new Date()) {
+      this.errorMessage = 'Ngày nhập không được vượt quá ngày hôm nay.';
       return;
     }
     if (isNaN(this.currentImportGood.quantity) || this.currentImportGood.quantity < 0) {
@@ -224,11 +243,13 @@ export class ImportGoodsComponent implements OnInit {
     }
   }
 
+  // Mở modal xác nhận xóa nhập hàng
   openDeleteModal(id: number) {
     this.importGoodToDelete = id;
     this.modalService.open(this.deleteModal);
   }
 
+  // Xác nhận xóa nhập hàng
   confirmDelete() {
     if (this.importGoodToDelete !== null) {
       this.deleteImportGood(this.importGoodToDelete);
@@ -236,6 +257,7 @@ export class ImportGoodsComponent implements OnInit {
     }
   }
 
+  // Xóa nhập hàng
   deleteImportGood(id: number) {
     this.importGoodsService.deleteImportGood(id).subscribe(() => {
       this.importGoods = this.importGoods.filter(p => p.id !== id);
@@ -243,19 +265,23 @@ export class ImportGoodsComponent implements OnInit {
     });
   }
 
+  // Mở modal xác nhận xóa nhiều nhập hàng
   openBulkDeleteModal() {
     this.modalService.open(this.bulkDeleteModal);
   }
 
+  // Xác nhận xóa nhiều nhập hàng
   confirmBulkDelete() {
     const selectedIds = this.paginatedImportGoods.filter(importGood => importGood.selected).map(importGood => importGood.id);
     selectedIds.forEach(id => this.deleteImportGood(id));
   }
 
+  // Kiểm tra tính hợp lệ của form
   isFormValid(): boolean {
     return this.currentImportGood.nameproduct && this.currentImportGood.type && this.currentImportGood.supplier && this.currentImportGood.quantity && this.currentImportGood.price && this.currentImportGood.date;
   }
 
+  // Tìm kiếm nhập hàng theo từ khóa
   searchImportGoods() {
     if (this.searchTerm.trim() === '') {
       this.loadImportGoods();
@@ -269,12 +295,14 @@ export class ImportGoodsComponent implements OnInit {
     }
   }
 
+  // Xử lý khi thay đổi từ khóa tìm kiếm
   onSearchTermChange() {
     if (this.searchTerm.trim() === '') {
       this.loadImportGoods();
     }
   }
 
+  // Sắp xếp danh sách nhập hàng theo cột
   sortImportGoods(key: string) {
     if (this.sortKey === key) {
       this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
@@ -296,21 +324,25 @@ export class ImportGoodsComponent implements OnInit {
     this.updatePaginatedImportGoods();
   }
 
+  // Chọn hoặc bỏ chọn tất cả nhập hàng
   toggleSelectAll(event: any) {
     const isChecked = event.target.checked;
     this.paginatedImportGoods.forEach(importGood => importGood.selected = isChecked);
     this.selectAll = isChecked;
   }
 
+  // Xử lý khi thay đổi trạng thái checkbox
   onCheckboxChange() {
     this.selectAll = this.paginatedImportGoods.every(importGood => importGood.selected);
   }
 
+  // Xóa các nhập hàng đã chọn
   deleteSelected() {
     const selectedIds = this.paginatedImportGoods.filter(importGood => importGood.selected).map(importGood => importGood.id);
     selectedIds.forEach(id => this.deleteImportGood(id));
   }
 
+  // Xuất danh sách nhập hàng đã chọn ra file Excel
   exportToExcel() {
     const selectedData = this.paginatedImportGoods.filter(importGood => importGood.selected);
     const worksheet = XLSX.utils.json_to_sheet(selectedData);

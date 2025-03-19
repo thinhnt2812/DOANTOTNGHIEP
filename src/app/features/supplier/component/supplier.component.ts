@@ -27,10 +27,12 @@ export class SupplierComponent implements OnInit {
   constructor(private supplierService: SupplierService, private modalService: NgbModal) {}
 
   ngOnInit(): void {
+    // Đặt tiêu đề trang và tải danh sách nhà cung cấp
     document.title = 'Danh sách nhà cung cấp';
     this.loadSuppliers();
   }
 
+  // Tải danh sách nhà cung cấp từ dịch vụ
   loadSuppliers() {
     this.supplierService.getSuppliers().subscribe((data) => {
       this.suppliers = data;
@@ -38,16 +40,19 @@ export class SupplierComponent implements OnInit {
     });
   }
 
+  // Cập nhật danh sách nhà cung cấp theo phân trang
   updatePaginatedSuppliers() {
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
     const endIndex = startIndex + this.itemsPerPage;
     this.paginatedSuppliers = this.suppliers.slice(startIndex, endIndex);
   }
 
+  // Tính tổng số trang
   get totalPages(): number {
     return Math.ceil(this.suppliers.length / this.itemsPerPage);
   }
 
+  // Lấy danh sách các trang hiển thị
   get pages(): number[] {
     const totalPages = this.totalPages;
     const currentPage = this.currentPage;
@@ -75,20 +80,24 @@ export class SupplierComponent implements OnInit {
     return pages;
   }
 
+  // Chuyển đến trang đầu tiên
   goToFirstPage() {
     this.changePage(1);
   }
 
+  // Chuyển đến trang cuối cùng
   goToLastPage() {
     this.changePage(this.totalPages);
   }
 
+  // Thay đổi trang hiện tại
   changePage(page: number) {
     if (page < 1 || page > this.totalPages) return;
     this.currentPage = page;
     this.updatePaginatedSuppliers();
   }
 
+  // Mở modal thêm/sửa nhà cung cấp
   openModal(supplier: any = null) {
     this.currentSupplier = supplier ? { ...supplier } : {
       id: '',
@@ -99,12 +108,14 @@ export class SupplierComponent implements OnInit {
     this.modalService.open(this.supplierModal);
   }
 
+  // Lưu thông tin nhà cung cấp (thêm mới hoặc cập nhật)
   saveSupplier() {
     if (!this.isFormValid()) {
       return;
     }
     this.errorMessage = null;
     if (this.currentSupplier.id) {
+      // Cập nhật nhà cung cấp
       this.supplierService.updateSupplier(this.currentSupplier).subscribe(() => {
         const index = this.suppliers.findIndex(s => s.id === this.currentSupplier.id);
         this.suppliers[index] = this.currentSupplier;
@@ -112,6 +123,7 @@ export class SupplierComponent implements OnInit {
         this.modalService.dismissAll();
       });
     } else {
+      // Thêm mới nhà cung cấp
       const maxId = this.suppliers.length > 0 ? Math.max(...this.suppliers.map(s => parseInt(s.id))) : 0;
       this.currentSupplier.id = (maxId + 1).toString();
       this.supplierService.addSupplier(this.currentSupplier).subscribe((supplier) => {
@@ -122,11 +134,13 @@ export class SupplierComponent implements OnInit {
     }
   }
 
+  // Mở modal xác nhận xóa nhà cung cấp
   openDeleteModal(id: number) {
     this.supplierToDelete = id;
     this.modalService.open(this.deleteModal);
   }
 
+  // Xác nhận xóa nhà cung cấp
   confirmDelete() {
     if (this.supplierToDelete !== null) {
       this.deleteSupplier(this.supplierToDelete);
@@ -134,6 +148,7 @@ export class SupplierComponent implements OnInit {
     }
   }
 
+  // Xóa nhà cung cấp
   deleteSupplier(id: number) {
     this.supplierService.deleteSupplier(id).subscribe(() => {
       this.suppliers = this.suppliers.filter(s => s.id !== id);
@@ -141,6 +156,7 @@ export class SupplierComponent implements OnInit {
     });
   }
 
+  // Kiểm tra tính hợp lệ của form
   isFormValid(): boolean {
     if (!this.currentSupplier.name || !this.currentSupplier.address || !this.currentSupplier.status) {
       this.errorMessage = 'Vui lòng nhập đầy đủ thông tin.';
@@ -149,6 +165,7 @@ export class SupplierComponent implements OnInit {
     return true;
   }
 
+  // Tìm kiếm nhà cung cấp theo từ khóa
   searchSuppliers() {
     if (this.searchTerm.trim() === '') {
       this.loadSuppliers();
@@ -161,12 +178,14 @@ export class SupplierComponent implements OnInit {
     }
   }
 
+  // Xử lý khi thay đổi từ khóa tìm kiếm
   onSearchTermChange() {
     if (this.searchTerm.trim() === '') {
       this.loadSuppliers();
     }
   }
 
+  // Sắp xếp danh sách nhà cung cấp theo cột
   sortSuppliers(key: string) {
     if (this.sortKey === key) {
       this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';

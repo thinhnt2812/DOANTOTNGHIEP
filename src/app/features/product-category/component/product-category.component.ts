@@ -27,11 +27,13 @@ export class ProductCategoryComponent implements OnInit {
   constructor(private categoryService: ProductCategoryService, private modalService: NgbModal) {}
 
   ngOnInit(): void {
+    // Thiết lập tiêu đề trang và tải danh sách danh mục sản phẩm
     document.title = 'Danh sách danh mục sản phẩm';
     this.loadCategories();
   }
 
   loadCategories() {
+    // Lấy danh sách danh mục sản phẩm từ dịch vụ và cập nhật danh sách phân trang
     this.categoryService.getCategories().subscribe((data) => {
       this.categories = data;
       this.updatePaginatedCategories();
@@ -39,16 +41,19 @@ export class ProductCategoryComponent implements OnInit {
   }
 
   updatePaginatedCategories() {
+    // Cập nhật danh sách danh mục sản phẩm theo trang hiện tại
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
     const endIndex = startIndex + this.itemsPerPage;
     this.paginatedCategories = this.categories.slice(startIndex, endIndex);
   }
 
   get totalPages(): number {
+    // Tính tổng số trang dựa trên số lượng danh mục và số mục trên mỗi trang
     return Math.ceil(this.categories.length / this.itemsPerPage);
   }
 
   get pages(): number[] {
+    // Tạo danh sách các trang để hiển thị trong phân trang
     const totalPages = this.totalPages;
     const currentPage = this.currentPage;
     const pages = [];
@@ -76,20 +81,24 @@ export class ProductCategoryComponent implements OnInit {
   }
 
   goToFirstPage() {
+    // Chuyển đến trang đầu tiên
     this.changePage(1);
   }
 
   goToLastPage() {
+    // Chuyển đến trang cuối cùng
     this.changePage(this.totalPages);
   }
 
   changePage(page: number) {
+    // Thay đổi trang hiện tại và cập nhật danh sách phân trang
     if (page < 1 || page > this.totalPages) return;
     this.currentPage = page;
     this.updatePaginatedCategories();
   }
 
   openModal(category: any = null) {
+    // Mở modal để thêm hoặc chỉnh sửa danh mục sản phẩm
     this.currentCategory = category ? { ...category } : {
       id: '',
       name: '',
@@ -100,12 +109,14 @@ export class ProductCategoryComponent implements OnInit {
   }
 
   saveCategory() {
+    // Lưu danh mục sản phẩm (thêm mới hoặc cập nhật)
     if (!this.isFormValid()) {
       this.errorMessage = 'Vui lòng nhập đầy đủ thông tin.';
       return;
     }
     this.errorMessage = null;
     if (this.currentCategory.id) {
+      // Cập nhật danh mục sản phẩm
       this.categoryService.updateCategory(this.currentCategory).subscribe(() => {
         const index = this.categories.findIndex(c => c.id === this.currentCategory.id);
         this.categories[index] = this.currentCategory;
@@ -113,6 +124,7 @@ export class ProductCategoryComponent implements OnInit {
         this.modalService.dismissAll();
       });
     } else {
+      // Thêm mới danh mục sản phẩm
       const maxId = this.categories.length > 0 ? Math.max(...this.categories.map(c => parseInt(c.id))) : 0;
       this.currentCategory.id = (maxId + 1).toString();
       this.categoryService.addCategory(this.currentCategory).subscribe((category) => {
@@ -124,11 +136,13 @@ export class ProductCategoryComponent implements OnInit {
   }
 
   openDeleteModal(id: number) {
+    // Mở modal xác nhận xóa danh mục sản phẩm
     this.categoryToDelete = id;
     this.modalService.open(this.deleteModal);
   }
 
   confirmDelete() {
+    // Xác nhận xóa danh mục sản phẩm
     if (this.categoryToDelete !== null) {
       this.deleteCategory(this.categoryToDelete);
       this.categoryToDelete = null;
@@ -136,6 +150,7 @@ export class ProductCategoryComponent implements OnInit {
   }
 
   deleteCategory(id: number) {
+    // Xóa danh mục sản phẩm theo ID
     this.categoryService.deleteCategory(id).subscribe(() => {
       this.categories = this.categories.filter(c => c.id !== id);
       this.updatePaginatedCategories();
@@ -143,10 +158,12 @@ export class ProductCategoryComponent implements OnInit {
   }
 
   isFormValid(): boolean {
+    // Kiểm tra tính hợp lệ của biểu mẫu
     return this.currentCategory.name && this.currentCategory.description && this.currentCategory.status;
   }
 
   searchCategories() {
+    // Tìm kiếm danh mục sản phẩm theo từ khóa
     if (this.searchTerm.trim() === '') {
       this.loadCategories();
     } else {
@@ -159,12 +176,14 @@ export class ProductCategoryComponent implements OnInit {
   }
 
   onSearchTermChange() {
+    // Xử lý khi từ khóa tìm kiếm thay đổi
     if (this.searchTerm.trim() === '') {
       this.loadCategories();
     }
   }
 
   sortCategories(key: string) {
+    // Sắp xếp danh mục sản phẩm theo cột được chọn
     if (this.sortKey === key) {
       this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
     } else {

@@ -29,6 +29,7 @@ export class OrderManagementComponent implements OnInit {
     private productService: ProductService
   ) {}
 
+  // Hàm khởi tạo, được gọi khi component được tải
   ngOnInit(): void {
     document.title = 'Danh sách đơn hàng';
     this.fetchOrders();
@@ -37,6 +38,7 @@ export class OrderManagementComponent implements OnInit {
     this.pendingSelectedProduct = this.selectedProduct;
   }
 
+  // Lấy danh sách đơn hàng từ service
   fetchOrders(): void {
     this.orderService.getOrder().subscribe((data) => {
       this.orders = data;
@@ -45,34 +47,44 @@ export class OrderManagementComponent implements OnInit {
     });
   }
 
+  // Lấy danh sách sản phẩm từ service
   fetchProducts(): void {
     this.productService.getProducts().subscribe((products) => {
         this.uniqueProducts = products.map(product => product.name);
     });
   }
 
+  // Xử lý khi người dùng nhập từ khóa tìm kiếm
   onSearchTermInput(): void {
     this.pendingSearchTerm = this.pendingSearchTerm.trim();
+    if (this.pendingSearchTerm === '') {
+      this.filteredOrders = [...this.orders]; 
+    }
   }
 
+  // Xử lý khi người dùng nhập bộ lọc sản phẩm
   onProductFilterInput(): void {
     this.pendingSelectedProduct = this.pendingSelectedProduct.trim();
   }
 
+  // Xác nhận áp dụng bộ lọc
   confirmFilters(): void {
     this.searchTerm = this.pendingSearchTerm;
     this.selectedProduct = this.pendingSelectedProduct;
     this.applyFilters();
   }
 
+  // Xử lý khi từ khóa tìm kiếm thay đổi
   onSearchTermChange(): void {
     this.applyFilters();
   }
 
+  // Xử lý khi bộ lọc sản phẩm thay đổi
   onProductFilterChange(): void {
     this.applyFilters();
   }
 
+  // Áp dụng bộ lọc và sắp xếp danh sách đơn hàng
   applyFilters(): void {
     const term = this.searchTerm.toLowerCase();
     this.filteredOrders = this.orders.filter(order => {
@@ -98,6 +110,7 @@ export class OrderManagementComponent implements OnInit {
     }
   }
 
+  // Xử lý khi người dùng thay đổi tiêu chí sắp xếp
   onSort(key: string): void {
     if (this.sortKey === key) {
       this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
@@ -108,26 +121,31 @@ export class OrderManagementComponent implements OnInit {
     this.applyFilters();
   }
 
+  // Tính tổng số trang
   get totalPages(): number {
     return Math.ceil(this.filteredOrders.length / this.itemsPerPage);
   }
 
+  // Lấy danh sách đơn hàng theo trang
   get paginatedOrders(): OrderManagementModel[] {
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
     const endIndex = startIndex + this.itemsPerPage;
     return this.filteredOrders.slice(startIndex, endIndex);
   }
 
+  // Chuyển đến trang cụ thể
   changePage(page: number): void {
     if (page >= 1 && page <= this.totalPages) {
       this.currentPage = page;
     }
   }
 
+  // Chuyển đến trang đầu tiên
   goToFirstPage(): void {
     this.changePage(1);
   }
 
+  // Chuyển đến trang cuối cùng
   goToLastPage(): void {
     this.changePage(this.totalPages);
   }

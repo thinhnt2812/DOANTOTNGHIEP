@@ -42,10 +42,12 @@ export class EmployeeComponent implements OnInit {
   constructor(private employeeService: EmployeeService, private modalService: NgbModal) {}
 
   ngOnInit(): void {
+    // Đặt tiêu đề trang và tải danh sách nhân viên khi khởi tạo component
     document.title = 'Danh sách nhân viên';
     this.loadEmployees();
   }
 
+  // Tải danh sách nhân viên từ dịch vụ
   loadEmployees() {
     this.employeeService.getEmployees().subscribe((data) => {
       this.employees = data;
@@ -53,16 +55,19 @@ export class EmployeeComponent implements OnInit {
     });
   }
 
+  // Cập nhật danh sách nhân viên theo phân trang
   updatePaginatedEmployees() {
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
     const endIndex = startIndex + this.itemsPerPage;
     this.paginatedEmployees = this.employees.slice(startIndex, endIndex);
   }
 
+  // Tính tổng số trang
   get totalPages(): number {
     return Math.ceil(this.employees.length / this.itemsPerPage);
   }
 
+  // Lấy danh sách các trang hiển thị
   get pages(): number[] {
     const totalPages = this.totalPages;
     const currentPage = this.currentPage;
@@ -90,20 +95,24 @@ export class EmployeeComponent implements OnInit {
     return pages;
   }
 
+  // Chuyển đến trang đầu tiên
   goToFirstPage() {
     this.changePage(1);
   }
 
+  // Chuyển đến trang cuối cùng
   goToLastPage() {
     this.changePage(this.totalPages);
   }
 
+  // Thay đổi trang hiện tại
   changePage(page: number) {
     if (page < 1 || page > this.totalPages) return;
     this.currentPage = page;
     this.updatePaginatedEmployees();
   }
 
+  // Mở modal thêm hoặc chỉnh sửa nhân viên
   openModal(employee: any = null) {
     this.currentEmployee = employee ? { 
       ...employee,
@@ -123,7 +132,9 @@ export class EmployeeComponent implements OnInit {
     this.modalService.open(this.employeeModal);
   }
 
+  // Lưu thông tin nhân viên (thêm mới hoặc cập nhật)
   saveEmployee() {
+    // Kiểm tra tính hợp lệ của biểu mẫu
     if (!this.isFormValid()) {
       this.errorMessage = 'Vui lòng nhập đầy đủ thông tin.';
       return;
@@ -155,21 +166,25 @@ export class EmployeeComponent implements OnInit {
     }
   }
 
+  // Kiểm tra số điện thoại có hợp lệ không
   isPhoneNumberValid(phone: string): boolean {
     return /^\d+$/.test(phone);
   }
 
+  // Kiểm tra ngày sinh có hợp lệ không
   isDateOfBirthValid(dob: string): boolean {
     const today = new Date();
     const birthDate = new Date(dob);
     return birthDate <= today;
   }
 
+  // Mở modal xác nhận xóa nhân viên
   openDeleteModal(id: number) {
     this.employeeToDelete = id;
     this.modalService.open(this.deleteModal);
   }
 
+  // Xác nhận xóa nhân viên
   confirmDelete() {
     if (this.employeeToDelete !== null) {
       this.deleteEmployee(this.employeeToDelete);
@@ -177,6 +192,7 @@ export class EmployeeComponent implements OnInit {
     }
   }
 
+  // Xóa nhân viên
   deleteEmployee(id: number) {
     this.employeeService.deleteEmployee(id).subscribe(() => {
       this.employees = this.employees.filter(e => e.id !== id);
@@ -184,12 +200,14 @@ export class EmployeeComponent implements OnInit {
     });
   }
 
+  // Kiểm tra biểu mẫu có hợp lệ không
   isFormValid(): boolean {
     return this.currentEmployee.name && this.currentEmployee.gender && this.currentEmployee.phone &&
            this.currentEmployee.hometown && this.currentEmployee.dob && this.currentEmployee.position &&
            this.currentEmployee.dow && this.currentEmployee.status;
   }
 
+  // Tìm kiếm nhân viên theo từ khóa
   searchEmployees() {
     if (this.searchTerm.trim() === '') {
       this.loadEmployees();
@@ -203,12 +221,14 @@ export class EmployeeComponent implements OnInit {
     }
   }
 
+  // Xử lý khi thay đổi từ khóa tìm kiếm
   onSearchTermChange() {
     if (this.searchTerm.trim() === '') {
       this.loadEmployees();
     }
   }
 
+  // Sắp xếp danh sách nhân viên theo cột
   sortEmployees(key: string) {
     if (this.sortKey === key) {
       this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';

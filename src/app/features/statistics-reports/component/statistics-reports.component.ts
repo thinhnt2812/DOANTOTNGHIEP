@@ -90,8 +90,10 @@ export class StatisticsReportsComponent implements OnInit, AfterViewInit {
   constructor(private statisticsService: StatisticsReportsService, private modalService: NgbModal) {}
 
   ngOnInit(): void {
+    // Khởi tạo tiêu đề trang và tải dữ liệu thống kê từ service
     document.title = 'Thống kê báo cáo';
     this.statisticsService.getEmployeeStatistics().subscribe((data: EmployeeStatistics) => {
+      // Lấy dữ liệu thống kê nhân viên
       this.totalEmployees = data.totalEmployees;
       this.activeEmployees = data.activeEmployees;
       this.resignedEmployees = data.resignedEmployees;
@@ -100,6 +102,7 @@ export class StatisticsReportsComponent implements OnInit, AfterViewInit {
     });
 
     this.statisticsService.getProductStatistics().subscribe((data: ProductStatistics) => {
+      // Lấy dữ liệu thống kê sản phẩm
       this.totalProducts = data.totalProducts;
       this.activeProducts = data.activeProducts;
       this.outOfStockProducts = data.outOfStockProducts;
@@ -108,6 +111,7 @@ export class StatisticsReportsComponent implements OnInit, AfterViewInit {
     });
 
     this.statisticsService.getSupplierStatistics().subscribe((data: SupplierStatistics) => {
+      // Lấy dữ liệu thống kê nhà cung cấp
       this.totalSuppliers = data.totalSuppliers;
       this.activeSuppliers = data.activeSuppliers;
       this.inactiveSuppliers = data.inactiveSuppliers;
@@ -115,6 +119,7 @@ export class StatisticsReportsComponent implements OnInit, AfterViewInit {
     });
 
     this.statisticsService.getCategoryStatistics().subscribe((data: CategoryStatistics) => {
+      // Lấy dữ liệu thống kê danh mục
       this.totalCategories = data.totalCategories;
       this.activeCategories = data.activeCategories;
       this.inactiveCategories = data.inactiveCategories;
@@ -122,6 +127,7 @@ export class StatisticsReportsComponent implements OnInit, AfterViewInit {
     });
 
     this.statisticsService.getAccountStatistics().subscribe((data: AccountStatistics) => {
+      // Lấy dữ liệu thống kê tài khoản
       this.totalAccounts = data.totalAccounts;
       this.activeAccounts = data.activeAccounts;
       this.inactiveAccounts = data.inactiveAccounts;
@@ -132,34 +138,40 @@ export class StatisticsReportsComponent implements OnInit, AfterViewInit {
     });
 
     this.statisticsService.getImportedProductStatistics().subscribe((total: number) => {
+      // Lấy tổng số sản phẩm nhập khẩu
       this.totalImportedProducts = total;
     });
 
     this.statisticsService.getOrdertatistics().subscribe((totalorder: number) => {
+      // Lấy tổng số đơn hàng
       this.totalOrdertatistics = totalorder;
     });
 
     this.statisticsService.getMonthlyRevenue().subscribe((data) => {
+      // Lấy dữ liệu doanh thu hàng tháng
       this.monthlyRevenue = data;
       this.renderRevenueChart();
     });
 
     this.statisticsService.getMonthlyProfit().subscribe((data) => {
+      // Lấy dữ liệu lợi nhuận hàng tháng
       this.monthlyProfit = data;
       if (this.selectedReportType === 'profit') {
         this.renderProfitChart();
       }
     });
 
-    // Load all orders by default
+    // Tải toàn bộ đơn hàng và nhập khẩu
     this.loadAllOrders();
     this.loadAllImports();
   }
 
   ngAfterViewInit(): void {
+    // Hàm được gọi sau khi view đã được khởi tạo
   }
 
   ngOnChanges(): void {
+    // Cập nhật biểu đồ khi loại báo cáo thay đổi
     if (this.selectedReportType === 'revenue') {
       this.renderRevenueChart();
     } else if (this.selectedReportType === 'profit') {
@@ -168,6 +180,7 @@ export class StatisticsReportsComponent implements OnInit, AfterViewInit {
   }
 
   onReportTypeChange(): void {
+    // Xử lý khi người dùng thay đổi loại báo cáo
     if (this.selectedReportType === 'revenue') {
       this.renderRevenueChart();
     } else if (this.selectedReportType === 'profit') {
@@ -176,6 +189,7 @@ export class StatisticsReportsComponent implements OnInit, AfterViewInit {
   }
 
   renderEmployeeChart(): void {
+    // Vẽ biểu đồ thống kê nhân viên
     if (!this.employeePieChart || !this.employeePieChart.nativeElement) return;
 
     const ctx = this.employeePieChart.nativeElement.getContext('2d');
@@ -199,6 +213,7 @@ export class StatisticsReportsComponent implements OnInit, AfterViewInit {
     });
   }
   renderProductChart(): void {
+    // Vẽ biểu đồ thống kê sản phẩm
     if (!this.productPieChart || !this.productPieChart.nativeElement) return;
 
     const ctx = this.productPieChart.nativeElement.getContext('2d');
@@ -223,6 +238,7 @@ export class StatisticsReportsComponent implements OnInit, AfterViewInit {
   }
 
   renderCategoryChart(): void {
+    // Vẽ biểu đồ thống kê danh mục
     if (!this.categoryPieChart || !this.categoryPieChart.nativeElement) return;
 
     const ctx = this.categoryPieChart.nativeElement.getContext('2d');
@@ -247,6 +263,7 @@ export class StatisticsReportsComponent implements OnInit, AfterViewInit {
   }
 
   renderSupplierChart(): void {
+    // Vẽ biểu đồ thống kê nhà cung cấp
     if (!this.supplierPieChart || !this.supplierPieChart.nativeElement) return;
 
     const ctx = this.supplierPieChart.nativeElement.getContext('2d');
@@ -271,6 +288,7 @@ export class StatisticsReportsComponent implements OnInit, AfterViewInit {
   }
 
   renderAccountChart(): void {
+    // Vẽ biểu đồ thống kê tài khoản
     if (!this.accountPieChart || !this.accountPieChart.nativeElement) return;
 
     const ctx = this.accountPieChart.nativeElement.getContext('2d');
@@ -295,6 +313,7 @@ export class StatisticsReportsComponent implements OnInit, AfterViewInit {
   }
 
   renderAccountRoleChart(): void {
+    // Vẽ biểu đồ thống kê vai trò tài khoản
     if (!this.accountRolePieChart || !this.accountRolePieChart.nativeElement) return;
 
     const ctx = this.accountRolePieChart.nativeElement.getContext('2d');
@@ -319,6 +338,7 @@ export class StatisticsReportsComponent implements OnInit, AfterViewInit {
   }
 
   renderRevenueChart(): void {
+    // Vẽ biểu đồ doanh thu
     if (!this.revenueBarChart || !this.revenueBarChart.nativeElement) return;
 
     const ctx = this.revenueBarChart.nativeElement.getContext('2d');
@@ -358,6 +378,7 @@ export class StatisticsReportsComponent implements OnInit, AfterViewInit {
   }
 
   renderProfitChart(): void {
+    // Vẽ biểu đồ lợi nhuận
     if (!this.revenueBarChart || !this.revenueBarChart.nativeElement) return;
 
     const ctx = this.revenueBarChart.nativeElement.getContext('2d');
@@ -397,11 +418,13 @@ export class StatisticsReportsComponent implements OnInit, AfterViewInit {
   }
 
   showNotification(modalContent: any, message: string): void {
+    // Hiển thị thông báo trong modal
     this.notificationMessage = message;
     this.modalService.open(modalContent, { windowClass: 'top-modal' });
   }
 
   filterOrders(modalContent: any): void {
+    // Lọc đơn hàng theo khoảng thời gian
     const today = new Date();
 
     if (!this.startDate || !this.endDate) {
@@ -429,6 +452,7 @@ export class StatisticsReportsComponent implements OnInit, AfterViewInit {
   }
 
   loadAllOrders(): void {
+    // Tải toàn bộ đơn hàng
     this.statisticsService.getAllOrders().subscribe((orders: any[]) => {
         this.filteredOrders = orders;
         this.totalOrderAmount = orders.reduce((sum, order) => sum + order.intomoney, 0);
@@ -437,12 +461,14 @@ export class StatisticsReportsComponent implements OnInit, AfterViewInit {
   }
 
   updatePagination(): void {
+    // Cập nhật phân trang cho danh sách đơn hàng
     this.totalPages = Math.ceil(this.filteredOrders.length / this.itemsPerPage);
     this.paginatedOrders = this.filteredOrders.slice((this.currentPage - 1) * this.itemsPerPage, this.currentPage * this.itemsPerPage);
     this.pages = this.generatePageNumbers();
   }
 
   generatePageNumbers(): number[] {
+    // Tạo danh sách số trang hiển thị
     const maxVisiblePages = 5;
     const pages: number[] = [];
 
@@ -464,20 +490,24 @@ export class StatisticsReportsComponent implements OnInit, AfterViewInit {
   }
 
   changePage(page: number): void {
+    // Chuyển đến trang cụ thể
     if (page < 1 || page > this.totalPages) return;
     this.currentPage = page;
     this.updatePagination();
   }
 
   goToFirstPage(): void {
+    // Chuyển đến trang đầu tiên
     this.changePage(1);
   }
 
   goToLastPage(): void {
+    // Chuyển đến trang cuối cùng
     this.changePage(this.totalPages);
   }
 
   exportOrdersToExcel() {
+    // Xuất danh sách đơn hàng ra file Excel
     const worksheet = XLSX.utils.json_to_sheet(this.filteredOrders);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Orders');
@@ -485,6 +515,7 @@ export class StatisticsReportsComponent implements OnInit, AfterViewInit {
   }
 
   filterImports(modalContent: any): void {
+    // Lọc danh sách nhập khẩu theo khoảng thời gian
     const today = new Date();
 
     if (!this.startImportDate || !this.endImportDate) {
@@ -514,6 +545,7 @@ export class StatisticsReportsComponent implements OnInit, AfterViewInit {
   }
 
   loadAllImports(): void {
+    // Tải toàn bộ danh sách nhập khẩu
     this.statisticsService.getAllImports().subscribe((imports: any[]) => {
         this.filteredImports = imports;
         this.totalImportStatistics = imports.reduce((sum, item) => sum + item.quantity, 0); // Fix: Calculate total quantity
@@ -523,12 +555,14 @@ export class StatisticsReportsComponent implements OnInit, AfterViewInit {
   }
 
   updateImportPagination(): void {
+    // Cập nhật phân trang cho danh sách nhập khẩu
     this.totalImportPages = Math.ceil(this.filteredImports.length / this.itemsPerPage);
     this.paginatedImports = this.filteredImports.slice((this.currentImportPage - 1) * this.itemsPerPage, this.currentImportPage * this.itemsPerPage);
     this.importPages = this.generateImportPageNumbers();
   }
 
   generateImportPageNumbers(): number[] {
+    // Tạo danh sách số trang hiển thị cho nhập khẩu
     const maxVisiblePages = 5;
     const pages: number[] = [];
 
@@ -550,20 +584,24 @@ export class StatisticsReportsComponent implements OnInit, AfterViewInit {
   }
 
   changeImportPage(page: number): void {
+    // Chuyển đến trang cụ thể trong danh sách nhập khẩu
     if (page < 1 || page > this.totalImportPages) return;
     this.currentImportPage = page;
     this.updateImportPagination();
   }
 
   goToFirstImportPage(): void {
+    // Chuyển đến trang đầu tiên trong danh sách nhập khẩu
     this.changeImportPage(1);
   }
 
   goToLastImportPage(): void {
+    // Chuyển đến trang cuối cùng trong danh sách nhập khẩu
     this.changeImportPage(this.totalImportPages);
   }
 
   exportImportsToExcel(): void {
+    // Xuất danh sách nhập khẩu ra file Excel
     const worksheet = XLSX.utils.json_to_sheet(this.filteredImports);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Imports');
@@ -571,6 +609,7 @@ export class StatisticsReportsComponent implements OnInit, AfterViewInit {
   }
 
   exportRevenueToExcel(): void {
+    // Xuất dữ liệu doanh thu ra file Excel
     const worksheet = XLSX.utils.json_to_sheet(this.monthlyRevenue);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Revenue');
@@ -578,6 +617,7 @@ export class StatisticsReportsComponent implements OnInit, AfterViewInit {
   }
 
   exportProfitToExcel(): void {
+    // Xuất dữ liệu lợi nhuận ra file Excel
     const worksheet = XLSX.utils.json_to_sheet(this.monthlyProfit);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Profit');
@@ -585,6 +625,7 @@ export class StatisticsReportsComponent implements OnInit, AfterViewInit {
   }
 
   sortOrdersBy(field: string): void {
+    // Sắp xếp danh sách đơn hàng theo trường cụ thể
     if (this.currentOrderSortField === field) {
         this.currentOrderSortDirection = this.currentOrderSortDirection === 'asc' ? 'desc' : 'asc';
     } else {
@@ -603,6 +644,7 @@ export class StatisticsReportsComponent implements OnInit, AfterViewInit {
   }
 
   sortImportsBy(field: string): void {
+    // Sắp xếp danh sách nhập khẩu theo trường cụ thể
     if (this.currentImportSortField === field) {
         this.currentImportSortDirection = this.currentImportSortDirection === 'asc' ? 'desc' : 'asc';
     } else {
