@@ -7,7 +7,7 @@ import { map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:3000/accounts';
+  private apiUrl = 'http://localhost:5000/accounts';
 
   constructor(private http: HttpClient) {}
 
@@ -18,18 +18,18 @@ export class AuthService {
    * @returns Observable chứa thông tin người dùng nếu đăng nhập thành công.
    */
   login(loginname: string, password: string): Observable<any> {
-    return this.http.get<any[]>(`${this.apiUrl}?loginname=${loginname}&password=${password}`)
+    return this.http.post<any>(`${this.apiUrl}/login`, { loginname, password })
       .pipe(
-        map(users => {
-          if (users.length > 0 && users[0].status === 'Đang hoạt động') {
-            localStorage.setItem('user', JSON.stringify(users[0]));
-            return users[0];
+        map(user => {
+          if (user && user.status === 'Đang hoạt động') {
+            localStorage.setItem('user', JSON.stringify(user));  // Lưu thông tin vào LocalStorage
+            return user;
           } else {
-            throw new Error('Invalid credentials or inactive account');
+            throw new Error('Sai thông tin đăng nhập hoặc tài khoản đã bị khóa!');
           }
         })
       );
-  }
+  }  
 
   /**
    * Đăng xuất người dùng bằng cách xóa thông tin trong localStorage.

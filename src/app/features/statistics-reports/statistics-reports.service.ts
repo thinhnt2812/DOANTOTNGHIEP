@@ -9,11 +9,11 @@ import { addDays, isAfter } from 'date-fns';
   providedIn: 'root',
 })
 export class StatisticsReportsService {
-  private baseUrl = 'http://localhost:3000';
+  private baseUrl = 'http://localhost:5000';
   private employeesEndpoint = '/employees';
   private productsEndpoint = '/products';
   private suppliersEndpoint = '/suppliers';
-  private categoriesEndpoint = '/product_category';
+  private categoriesEndpoint = '/product_categorys';
   private accountsEndpoint = '/accounts';
   private importgoodsEndpoint = '/import_goods';
   private importOrderEndpoint = '/orders';
